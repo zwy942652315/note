@@ -1,0 +1,96 @@
+<style lang="less">
+  .ui-note__title{
+    width: 95%;
+    height: auto;
+    margin: 30rpx auto;
+    input{
+      border-bottom: 1rpx solid #ccc;
+    }
+  }
+  .ui-note__container{
+    width: 100%;
+    height: auto;
+    textarea {
+      width: 95%;
+      height: 800rpx;
+      margin: 0 auto;
+      border: 1rpx solid #ccc;
+    }
+    .ui-note__btn{
+      width: 95%;
+      height: auto;
+      margin: 10rpx auto;
+    }
+  }
+</style>
+<template>
+  <form bindsubmit="formSubmit">
+    <view class="ui-note__title">
+      <input name="title" value="{{title}}" placeholder="请输入标题" auto-focus/>
+    </view>
+    <view class="ui-note__container">
+      <textarea id="answer_content" 
+        name="content" 
+        value="{{content}}" placeholder="请输入内容">
+      </textarea>
+
+      <view class="ui-note__btn">
+        <button type="default" form-type="submit">保存</button>
+      </view>
+    </view>
+  </form>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import _g from '../common/util'
+
+
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '添加笔记'
+    }
+    components = {
+
+    }
+
+    data = {
+      form: {
+        title: '',
+        content: ''
+      }
+    }
+
+    computed = {
+
+    }
+
+    formSubmit (e) {
+      console.log('开始新增');
+      this.form.title = e.detail.value.title;
+      this.form.content = e.detail.value.content;
+      console.log(this.form);
+      _g.ajax('post', '/note/add_note',this.form,function(res){
+        wx.navigateBack({
+          delta: 1
+        });
+      },function(err){
+        console.log('err');
+        console.log(err);
+      });
+    }
+
+    methods = {
+
+    }
+
+    events = {
+
+    }
+
+    onLoad() {
+      let self  = this;
+      
+    }
+  }
+</script>

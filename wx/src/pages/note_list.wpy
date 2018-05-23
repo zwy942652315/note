@@ -1,0 +1,78 @@
+<style lang="less">
+
+
+</style>
+<template>
+  <view class="container">
+    <view>
+      <button @tap="addNote" size="mini"> + </button>
+    </view>
+
+    <notelist :list.sync="list"></notelist>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import notelist from '@/components/notelist'
+  import utils from '../common/util'
+  import _g from '../common/util'
+
+
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '列表'
+    }
+    components = {
+      notelist: notelist
+    }
+
+    data = {
+      list: [
+        {
+          title: 'dfdafda',
+          content: '顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶',
+          modifytime: '2018-05-22'
+        },
+        {
+          title: 'dfdafda',
+          content: '顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶',
+          modifytime: '2018-05-22'
+        }
+      ]
+    }
+
+    computed = {
+      now () {
+        return +new Date()
+      }
+    }
+
+    methods = {
+      addNote () {
+        wx.navigateTo({
+          url: 'note_add'
+        })
+      }
+    }
+
+    events = {
+
+    }
+
+    onShow () {
+      var self = this;
+      _g.ajax('POST', '/note/get_all_note','',function(res){
+        self.list = res.data.object;
+        self.$apply();
+      },function(err){
+        console.log('err');
+        console.log(err);
+      });
+    }
+
+    onLoad() {
+
+    }
+  }
+</script>

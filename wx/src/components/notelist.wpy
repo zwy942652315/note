@@ -1,0 +1,48 @@
+<style type="less">
+	.ui-note__list{
+		width: 100%;
+	}
+  	.ui-note__item{
+  		border-bottom: 1rpx solid #ccc;
+  		width: 100%;
+  		padding: 10rpx 15rpx;
+      	line-height: 50rpx;
+  	}
+    .ui-note__title {
+      font-size: 14px;
+      font-weight: bold;
+    }
+    .ui-note__content{
+    	width: 80%;
+    	font-size: 14px;
+    	white-space: nowrap;
+    	overflow: hidden;
+    	text-overflow: ellipsis;
+    }
+    .ui-note__time {
+      font-size: 12px;
+    }
+</style>
+<template>
+  <view class="ui-note__list">
+  	<repeat for="{{list}}" index="index" item="item" key="key">
+		<view class="ui-note__item">
+			<view class="ui-note__title">{{item.title}}</view>
+			<view class="ui-note__content">{{item.content}}</view>
+			<view class="ui-note__time">{{item.modifytime}}</view>
+		</view>
+  	</repeat>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+
+  export default class Group extends wepy.component {
+    props = {
+      list: {
+      	type: Object,
+      	default: []
+      }
+    }
+  }
+</script>

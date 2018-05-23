@@ -1,0 +1,15 @@
+{
+	"description": "note add, delete, check and change",
+	"setting": {
+		"urlCheck": false,
+		"es6": false,
+		"postcss": false,
+		"minified": false,
+		"newFeature": true
+	},
+	"compileType": "miniprogram",
+	"appid": "wxa2ad8db3f9bb939c",
+	"projectname": "note-wechat-applets",
+	"miniprogramRoot": "./dist",
+	"condition": {}
+}
