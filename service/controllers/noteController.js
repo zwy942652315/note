@@ -67,11 +67,39 @@ async function getallnote (ctx) {
     ctx.body = {
         success: true,
         object: res,
-        mssage: '笔记列表'
+        mssage: '获取笔记列表成功'
     };
+}
+
+async function getnote (ctx) {
+    const noteId = ctx.query.noteId;
+    var res = await Note
+    .findOne({'_id': noteId}, function (err, res) {
+      if (err) return handleError(err);
+        console.log('某条笔记');
+        console.log(res) // Space Ghost is a talk show host.
+    })
+    ctx.body = {
+        success: true,
+        object: res,
+        mssage: '查询成功'
+    };
+}
+
+async function editnote (ctx) {
+    const noteId = ctx.query.noteId;
+    const title = ctx.request.body.title;
+    const content = ctx.request.body.content;
+    const modifytime = new Date();
+    Note.update({_id: noteId}, { $set: { title: title}}, {content: content}, {modifytime: modifytime}, function (err, raw) {
+      if (err) return handleError(err);
+      console.log('raw 就是mongodb返回的更改状态的falg ', raw);
+      //比如: { ok: 1, nModified: 2, n: 2 }
+    });
 }
 
 module.exports = noteController = {
     createnote: createnote,
-    getallnote: getallnote
+    getallnote: getallnote,
+    getnote: getnote
 };

@@ -58,7 +58,10 @@
       form: {
         title: '',
         content: ''
-      }
+      },
+      content: '',
+      title: '',
+      noteId: ''
     }
 
     computed = {
@@ -70,14 +73,25 @@
       this.form.title = e.detail.value.title;
       this.form.content = e.detail.value.content;
       console.log(this.form);
-      _g.ajax('post', '/note/add_note',this.form,function(res){
-        wx.navigateBack({
-          delta: 1
+      if (this.noteId) {
+        _g.ajax('post', '/note/edit_note',this.form,function(res){
+          wx.navigateBack({
+            delta: 1
+          });
+        },function(err){
+          console.log('err');
+          console.log(err);
         });
-      },function(err){
-        console.log('err');
-        console.log(err);
-      });
+      } else {
+        _g.ajax('post', '/note/add_note',this.form,function(res){
+          wx.navigateBack({
+            delta: 1
+          });
+        },function(err){
+          console.log('err');
+          console.log(err);
+        });
+      }
     }
 
     methods = {
@@ -88,8 +102,22 @@
 
     }
 
-    onLoad() {
-      let self  = this;
+    onLoad (option) {
+      var self = this;
+      if (option && option.id) {
+        self.noteId = option.id;
+        _g.ajax('get', '/note/get_note',{noteId: option.id},function(res){
+          if (res.data.success) {
+            self.title = res.data.object.title;
+            self.content = res.data.object.content;
+            self.$apply();
+          }
+
+        },function(err){
+          console.log('err');
+          console.log(err);
+        });
+      }
       
     }
   }

@@ -8,7 +8,7 @@
       <button @tap="addNote" size="mini"> + </button>
     </view>
 
-    <notelist :list.sync="list"></notelist>
+    <notelist :list.sync="list" @editNote.user="edit"></notelist>
   </view>
 </template>
 
@@ -52,6 +52,13 @@
       addNote () {
         wx.navigateTo({
           url: 'note_add'
+        })
+      },
+      edit (id) {
+        console.log('----------------------------------------')
+        console.log(id);
+        wx.navigateTo({
+          url: 'note_add?id=' + id
         })
       }
     }

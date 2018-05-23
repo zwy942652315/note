@@ -26,7 +26,7 @@
 <template>
   <view class="ui-note__list">
   	<repeat for="{{list}}" index="index" item="item" key="key">
-		<view class="ui-note__item">
+		<view class="ui-note__item" @tap="tap" data-id={{item._id}}>
 			<view class="ui-note__title">{{item.title}}</view>
 			<view class="ui-note__content">{{item.content}}</view>
 			<view class="ui-note__time">{{item.modifytime}}</view>
@@ -37,11 +37,20 @@
 <script>
   import wepy from 'wepy'
 
-  export default class Group extends wepy.component {
+  export default class Notelist extends wepy.component {
     props = {
       list: {
       	type: Object,
       	default: []
+      }
+    }
+
+    methods = {
+      tap (e) {
+        console.log('点击')
+        console.log(e)
+        console.log('232323')
+        this.$emit('editNote', e.currentTarget.dataset.id)
       }
     }
   }

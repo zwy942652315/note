@@ -28,6 +28,8 @@ mongoose.connect('mongodb://localhost:27017/note', options);
 
 router.post('/note/add_note', noteController.createnote)
 router.post('/note/get_all_note', noteController.getallnote)
+router.get('/note/get_note', noteController.getnote)
+router.post('/note/edit_note', noteController.getnote)
 
 app
   .use(router.routes())
