@@ -1,7 +1,7 @@
 <style type="less">
 	.ui-note__list{
 		width: 100%;
-    margin-bottom: 100rpx;
+    margin-bottom: 110rpx;
 	}
   .ui-note__line{
     width: 100%;
@@ -57,10 +57,10 @@
   	<repeat for="{{list}}" index="index" item="item" key="key">
       <view class="ui-note__line">
     		<view class="ui-note__item clearfix">
-          <view class="ui-note__itemleft" @tap="tap" data-id={{item._id}}>
-            <view class="ui-note__title fl">{{item.title}}</view>
+          <view class="ui-note__itemleft fl" @tap="tap" data-id={{item._id}}>
+            <view class="ui-note__title">{{item.title}}</view>
             <view class="ui-note__content">{{item.content}}</view>
-            <view class="ui-note__time">{{item.modifytime}}</view>
+            <view class="ui-note__time">{{item.createtime}}</view>
           </view>
           <view class="ui-note__itemright fr" @tap="deleteNote" data-id={{item._id}}>
             <image src="../assets/images/delete.png"></image>

@@ -12,11 +12,9 @@ var noteListSchema = new Schema({
 		type: String,
 		default: ''
 	},
-	modifytime: {
-		type: Date,
-		default:  Date.now
-	},
 	tags: { type: [String], index: true } 
-})
+},
+	{timestamps: {createdAt: 'createtime', updatedAt: 'modifytime'}}
+)
 
 module.exports = mongoose.model('note', noteListSchema, 'noteList')

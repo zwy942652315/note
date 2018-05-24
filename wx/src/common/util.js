@@ -19,6 +19,19 @@ const ajax = (type,url,data,success,error) => {
 	})
 }
 
+
+const getTimes = (t) => {
+    var time = new Date(t);
+    var year = time.getFullYear();
+    var month = (time.getMonth() + 1);
+    var date = time.getDate();
+    var hours = time.getHours() < 10 ? '0' + time.getHours() : time.getHours();
+    var min = time.getMinutes() < 10 ? '0' + time.getMinutes() : time.getMinutes();
+    var second = time.getSeconds() < 10 ? '0' + time.getSeconds() : time.getSeconds();
+    return year + '-' + month + '-' + date + ' ' + hours + ':' + min + ':' + second;
+}
+
 module.exports = {
-	ajax: ajax
+	ajax: ajax,
+	getTimes: getTimes
 }

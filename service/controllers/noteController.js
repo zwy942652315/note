@@ -1,11 +1,10 @@
 const Note = require('../models/note.js');
 
+// 新增一条笔记
 async function createnote(ctx) {
     const title = ctx.request.body.title;
     const content = ctx.request.body.content;
     const tags = ctx.request.body.tags;
-    const createTime = new Date();
-    const modifytime = new Date();
     if (title === '' && content === '') {
         // ctx.throw(400, '内容不能为空');
         ctx.status = 400;
@@ -39,8 +38,6 @@ async function createnote(ctx) {
     const noteList = new Note({
         title,
         content,
-        createTime,
-        modifytime,
         tags
     });
     let createResult = await noteList.save().catch(err => {
@@ -56,14 +53,15 @@ async function createnote(ctx) {
 
 }
 
+// 获取所有笔记列表
 async function getallnote (ctx) {
     var res = await Note
     .find({}, function (err, res) {
       if (err) return handleError(err);
-        // console.log('笔记列表');
-        // console.log(res) // Space Ghost is a talk show host.
+        console.log('笔记列表');
+        console.log(res) // Space Ghost is a talk show host.
     })
-    .sort({ modifytime: -1 })
+    .sort({ createtime: -1 })
     ctx.body = {
         success: true,
         object: res,
@@ -71,6 +69,7 @@ async function getallnote (ctx) {
     };
 }
 
+// 获取某一条笔记
 async function getnote (ctx) {
     const noteId = ctx.query.noteId;
     var res = await Note
@@ -86,12 +85,12 @@ async function getnote (ctx) {
     };
 }
 
+// 编辑某一条笔记
 async function editnote (ctx) {
     const noteId = ctx.request.body.noteId;
     const title = ctx.request.body.title;
     const content = ctx.request.body.content;
-    const modifytime = new Date();
-    const updateData = {$set:{ title: title,content: content,modifytime: modifytime}};
+    const updateData = {$set:{ title: title,content: content}};
     await Note.update({_id: noteId}, updateData, function (err, docs) {
       if (err) return handleError(err);
       console.log('docs 就是mongodb返回的更改状态的falg ', docs);
@@ -104,7 +103,7 @@ async function editnote (ctx) {
     };
 }
 
-
+// 删除某一条笔记
 async function deletenote (ctx) {
     const noteId = ctx.request.body.noteId;
     await Note.remove({_id: noteId}, function(err, docs){

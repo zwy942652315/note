@@ -19,9 +19,17 @@
       }
     }
   }
+  .ui-note__nolist{
+    text-align: center;
+    margin: 100rpx auto;
+    image{
+      width: 100rpx;
+      height: 100rpx;
+    }
+  }
 </style>
 <template>
-  <view class="container">
+  <view class="container" wx:if="{{list && list.length > 0}}">
     <notelist :list.sync="list" @editNote.user="edit" @deleteNote.user="deleteNote"></notelist>
     <view class="ui-note__tab">
       <view class="ui-note__tabItem">
@@ -33,6 +41,10 @@
         <view class="block"><text>新增</text></view>
       </view>
     </view>
+  </view>
+  <view class="ui-note__nolist" wx:if="{{list && list.length == 0}}" @tap="addNote">
+    <view class="block"><image src="../assets/images/none.png"></image></view>
+    <view class="block">暂无笔记，点击添加笔记</view>
   </view>
 </template>
 
@@ -52,18 +64,7 @@
     }
 
     data = {
-      list: [
-        {
-          title: '第一条笔记',
-          content: '第一条笔记内容',
-          modifytime: '2018-05-22'
-        },
-        {
-          title: '第二条笔记',
-          content: '第二条笔记内容',
-          modifytime: '2018-05-22'
-        }
-      ]
+      list: []
     }
 
     computed = {
@@ -103,6 +104,9 @@
       var self = this;
       _g.ajax('post', '/note/get_all_note','',function(res){
         self.list = res.data.object;
+        for( var v of self.list) {
+          v.createtime = _g.getTimes(v.createtime);
+        }
         self.$apply();
       },function(err){
         console.log('err');
