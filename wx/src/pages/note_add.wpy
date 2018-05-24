@@ -1,42 +1,61 @@
 <style lang="less">
-  .ui-note__title{
+  page {  
+    display: block;  
+    min-height: 100%;  
+    background-color: #ccc;  
+    overflow: hidden;
+  }
+  .ui-note__form{
     width: 95%;
+    height: 100%;
+    margin: 0 auto;
+    display: block;
+  }
+  .ui-note__title{
+    width: 100%;
     height: auto;
-    margin: 30rpx auto;
+    margin: 15rpx 0;
+    border-radius: 5rpx;
     input{
-      border-bottom: 1rpx solid #ccc;
+      height: 90rpx;
+      line-height: 90rpx;
+      background: #fff;
+      padding-left: 20rpx;
     }
   }
   .ui-note__container{
     width: 100%;
     height: auto;
+    margin: 0 auto;
     textarea {
-      width: 95%;
-      height: 800rpx;
+      width: auto;
+      min-height: 780rpx;
       margin: 0 auto;
-      border: 1rpx solid #ccc;
+      border-radius: 5rpx;
+      background: #fff;
+      padding: 20rpx;
     }
-    .ui-note__btn{
-      width: 95%;
-      height: auto;
-      margin: 10rpx auto;
-    }
+  }
+  .ui-note__btn{
+    width: 100%;
+    height: auto;
+    margin: 10rpx auto;
   }
 </style>
 <template>
-  <form bindsubmit="formSubmit">
+  <form class="ui-note__form" bindsubmit="formSubmit">
     <view class="ui-note__title">
-      <input name="title" value="{{title}}" placeholder="请输入标题" auto-focus/>
+      <input name="title" value="{{title}}" placeholder="点击输入标题"/>
     </view>
     <view class="ui-note__container">
       <textarea id="answer_content" 
         name="content" 
-        value="{{content}}" placeholder="请输入内容">
+        value="{{content}}" placeholder="点击输入内容">
       </textarea>
 
-      <view class="ui-note__btn">
-        <button type="default" form-type="submit">保存</button>
-      </view>
+    </view>
+    <view class="ui-note__btn">
+      <button class="mainColor" type="default" form-type="submit">保存</button>
     </view>
   </form>
 </template>
@@ -68,29 +87,27 @@
 
     }
 
+    editNote (url) {
+      _g.ajax('post', url,this.form,function(res){
+          wx.navigateTo({
+            url: 'note_list'
+          });
+        },function(err){
+          console.log('err');
+          console.log(err);
+        });
+    }
+
     formSubmit (e) {
       console.log('开始新增');
       this.form.title = e.detail.value.title;
       this.form.content = e.detail.value.content;
       console.log(this.form);
       if (this.noteId) {
-        _g.ajax('post', '/note/edit_note',this.form,function(res){
-          wx.navigateBack({
-            delta: 1
-          });
-        },function(err){
-          console.log('err');
-          console.log(err);
-        });
+        this.form.noteId = this.noteId;
+        this.editNote('/note/edit_note');
       } else {
-        _g.ajax('post', '/note/add_note',this.form,function(res){
-          wx.navigateBack({
-            delta: 1
-          });
-        },function(err){
-          console.log('err');
-          console.log(err);
-        });
+        this.editNote('/note/add_note');
       }
     }
 

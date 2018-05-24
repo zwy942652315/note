@@ -60,8 +60,8 @@ async function getallnote (ctx) {
     var res = await Note
     .find({}, function (err, res) {
       if (err) return handleError(err);
-        console.log('笔记列表');
-        console.log(res) // Space Ghost is a talk show host.
+        // console.log('笔记列表');
+        // console.log(res) // Space Ghost is a talk show host.
     })
     .sort({ modifytime: -1 })
     ctx.body = {
@@ -87,19 +87,41 @@ async function getnote (ctx) {
 }
 
 async function editnote (ctx) {
-    const noteId = ctx.query.noteId;
+    const noteId = ctx.request.body.noteId;
     const title = ctx.request.body.title;
     const content = ctx.request.body.content;
     const modifytime = new Date();
-    Note.update({_id: noteId}, { $set: { title: title}}, {content: content}, {modifytime: modifytime}, function (err, raw) {
+    const updateData = {$set:{ title: title,content: content,modifytime: modifytime}};
+    await Note.update({_id: noteId}, updateData, function (err, docs) {
       if (err) return handleError(err);
-      console.log('raw 就是mongodb返回的更改状态的falg ', raw);
+      console.log('docs 就是mongodb返回的更改状态的falg ', docs);
       //比如: { ok: 1, nModified: 2, n: 2 }
     });
+    ctx.body = {
+        success: true,
+        object: null,
+        mssage: '修改成功'
+    };
+}
+
+
+async function deletenote (ctx) {
+    const noteId = ctx.request.body.noteId;
+    await Note.remove({_id: noteId}, function(err, docs){
+      if (err) return handleError(err);
+      console.log('docs 就是mongodb返回的删除状态的falg ', docs);
+    });
+    ctx.body = {
+        success: true,
+        object: null,
+        mssage: '删除成功'
+    };
 }
 
 module.exports = noteController = {
     createnote: createnote,
     getallnote: getallnote,
-    getnote: getnote
+    getnote: getnote,
+    editnote: editnote,
+    deletenote: deletenote
 };

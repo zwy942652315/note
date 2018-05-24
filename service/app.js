@@ -18,18 +18,25 @@ var options = {
 }
 mongoose.connect('mongodb://localhost:27017/note', options);
 
-// router.post('/note/add_note', (ctx, next) => {
-//   // ctx.router available
-//   console.log('***************************************');
-//   console.log(JSON.stringify(ctx,null,4));
-//   console.log(ctx.request.body)
-// });
+mongoose.connection.on("error", function (error) {  
+    console.log("数据库连接失败：" + error);
+});
+
+mongoose.connection.on("open", function () {  
+    console.log("数据库连接成功"); 
+})
+
+mongoose.connection.on('disconnected', function () {    
+    console.log('数据库连接断开');  
+})
+
 
 
 router.post('/note/add_note', noteController.createnote)
 router.post('/note/get_all_note', noteController.getallnote)
 router.get('/note/get_note', noteController.getnote)
-router.post('/note/edit_note', noteController.getnote)
+router.post('/note/edit_note', noteController.editnote)
+router.post('/note/delete_note', noteController.deletenote)
 
 app
   .use(router.routes())

@@ -1,13 +1,42 @@
 <style type="less">
 	.ui-note__list{
 		width: 100%;
+    margin-bottom: 100rpx;
 	}
+  .ui-note__line{
+    width: 100%;
+    height: auto;
+    overflow: auto;
+  }
+  .ui-note__line::-webkit-scrollbar {
+    display: none;
+  }
   	.ui-note__item{
   		border-bottom: 1rpx solid #ccc;
-  		width: 100%;
+  		width: 120%;
   		padding: 10rpx 15rpx;
-      	line-height: 50rpx;
+      line-height: 50rpx;
   	}
+    .ui-note__itemleft{
+      width: 85%;
+      height: 100%;
+      display: inline-block;
+    }
+    .ui-note__itemright{
+      width: 15%;
+      height: 150rpx;
+      display: flex;
+      background: red;
+      text-align: center;
+      justify-content: center;
+      align-items: center;
+      image{
+        width: 50rpx;
+        height: 50rpx;
+        display: inline-block;
+        vertical-align: middle;
+      }
+    }
     .ui-note__title {
       font-size: 14px;
       font-weight: bold;
@@ -26,11 +55,18 @@
 <template>
   <view class="ui-note__list">
   	<repeat for="{{list}}" index="index" item="item" key="key">
-		<view class="ui-note__item" @tap="tap" data-id={{item._id}}>
-			<view class="ui-note__title">{{item.title}}</view>
-			<view class="ui-note__content">{{item.content}}</view>
-			<view class="ui-note__time">{{item.modifytime}}</view>
-		</view>
+      <view class="ui-note__line">
+    		<view class="ui-note__item clearfix">
+          <view class="ui-note__itemleft" @tap="tap" data-id={{item._id}}>
+            <view class="ui-note__title fl">{{item.title}}</view>
+            <view class="ui-note__content">{{item.content}}</view>
+            <view class="ui-note__time">{{item.modifytime}}</view>
+          </view>
+          <view class="ui-note__itemright fr" @tap="deleteNote" data-id={{item._id}}>
+            <image src="../assets/images/delete.png"></image>
+          </view>
+    		</view>
+      </view>
   	</repeat>
   </view>
 </template>
@@ -51,6 +87,9 @@
         console.log(e)
         console.log('232323')
         this.$emit('editNote', e.currentTarget.dataset.id)
+      },
+      deleteNote (e) {
+        this.$emit('deleteNote', e.currentTarget.dataset.id)
       }
     }
   }

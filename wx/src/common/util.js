@@ -1,22 +1,3 @@
-import axios from "axios"
-import wepy from 'wepy'
-// const ajax = (type,url,data,success,error) => {
-// 	// data 验证
-// 	axios({
-// 		method: type,
-// 		url: 'http://localhost:3000' + url,
-// 		data: data
-// 	})
-//   	.then(
-//   		res=>{
-//   			success && success(res)
-//   		}
-// 	)
-//   	.catch(err=>{
-// 		error && error(err)
-//   	});
-// }
-
 const ajax = (type,url,data,success,error) => {
 	wx.request({
 		method: type,
