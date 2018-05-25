@@ -42,6 +42,8 @@ export default class extends wepy.app {
     pages: [
       'pages/note_list',
       'pages/note_add',
+      'pages/notebook',
+      'pages/notebook_list',
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -50,24 +52,38 @@ export default class extends wepy.app {
       navigationBarTextStyle: 'black'
     },
     // tabBar: {
+    //   "selectedColor": "#32b36e",
     //   "list": [{
     //     "pagePath": "pages/note_list",
     //     "text": "所有",
     //     "iconPath": "/assets/images/note.png",
     //     "selectedIconPath": "/assets/images/note_select.png",
-    //     "selectedColor": "#32b36e"
+    //     "selectedColor": "#32b36e",
+    //     "pageTum": "redirect",
+    //     active: true
     //   }, {
     //     "pagePath": "pages/note_add",
     //     "text": "新增",
     //     "iconPath": "/assets/images/add.png",
     //     "selectedIconPath": "/assets/images/add_select.png",
-    //     "selectedColor": "#32b36e"
+    //     "selectedColor": "#32b36e",
+    //     "pageTum": "navigate",
+    //     active: false
+    //   }, {
+    //     "pagePath": "pages/note_add",
+    //     "text": "笔记本",
+    //     "iconPath": "/assets/images/doc.png",
+    //     "selectedIconPath": "/assets/images/doc_select.png",
+    //     "selectedColor": "#32b36e",
+    //     "pageTum": "redirect",
+    //     active: false
     //   }]
     // }
   }
 
   globalData = {
-    userInfo: null
+    userInfo: null,
+    tabIndex: null
   }
 
   constructor () {
@@ -104,5 +120,6 @@ export default class extends wepy.app {
       }
     })
   }
+
 }
 </script>

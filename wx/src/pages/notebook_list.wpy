@@ -99,7 +99,7 @@
     methods = {
       edit (id) {
         wx.navigateTo({
-          url: 'note_add?id=' + id
+          url: 'note_list?id=' + id
         })
       },
       deleteNote (id) {
@@ -126,7 +126,7 @@
 
     getList () {
       var self = this;
-      _g.ajax('post', '/note/get_all_note','',function(res){
+      _g.ajax('post', '/notebook/get_all_note','',function(res){
         self.list = res.data.object;
         for( var v of self.list) {
           v.createtime = _g.getTimes(v.createtime);

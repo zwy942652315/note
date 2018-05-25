@@ -1,0 +1,54 @@
+<style type="less">
+  .ui-note__tab{
+    width: 100%;
+    height: 100rpx;
+    background: #fff;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    display: flex;
+    padding: 10rpx 0;
+    border-top: 1rpx solid #ccc;
+    .ui-note__tabItem{
+      flex: 1;
+      text-align: center;
+      font-size: 25rpx;
+      image{
+        width: 60rpx;
+        height: 60rpx;
+      }
+    }
+  }
+</style>
+<template>
+  <view class="ui-note__tab">
+      <block wx:for="{{tabBar.list}}" wx:key="pagePath">  
+        <navigator data-index="{{index}}" @tap="getTabIndex" hover-class="none" url="{{item.pagePath}}" open-type="{{item.pageTum}}" class="ui-note__tabItem" style="{{item.active? 'color: '+(item.selectedColor? item.selectedColor : tabBar.selectedColor) : ''}}">  
+          <image src="{{item.selectedIconPath}}" wx:if="{{item.active}}"></image>  
+          <image src="{{item.iconPath}}" wx:if="{{!item.active}}"></image>  
+          <view class="block"><text>{{item.text}}</text></view>
+        </navigator>  
+      </block> 
+    </view>
+</template>
+<script>
+  import wepy from 'wepy'
+
+  export default class TabBar extends wepy.component {
+    props = {
+      tabBar: {
+        type: Object,
+        default: {}
+      }
+    }
+
+    data = {
+    }
+
+    methods = {
+      getTabIndex (e) {
+        this.$parent.$parent.globalData.tabIndex = e.currentTarget.dataset.index;
+      }
+    }
+  }
+</script>

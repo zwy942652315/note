@@ -5,6 +5,7 @@ var Router = require('koa-router');
 var router = new Router();
 
 const noteController = require('./controllers/noteController.js');
+const noteBookController = require('./controllers/noteBookController.js');
 
 var app = new Koa();
 app.use(koaBody());
@@ -31,12 +32,19 @@ mongoose.connection.on('disconnected', function () {
 })
 
 
-
+// 笔记
 router.post('/note/add_note', noteController.createnote)
 router.post('/note/get_all_note', noteController.getallnote)
 router.get('/note/get_note', noteController.getnote)
 router.post('/note/edit_note', noteController.editnote)
 router.post('/note/delete_note', noteController.deletenote)
+
+// 笔记本
+router.post('/note/add_note_book', noteBookController.createnotebook)
+router.post('/note/get_all_notebook', noteBookController.getallnotebook)
+router.get('/note/get_note_book', noteBookController.getnotebook)
+router.post('/note/edit_note_book', noteBookController.editnotebook)
+router.post('/note/delete_note_book', noteBookController.deletenotebook)
 
 app
   .use(router.routes())

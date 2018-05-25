@@ -1,0 +1,217 @@
+<style lang="less">
+  .ui-note__nolist{
+    text-align: center;
+    margin: 100rpx auto;
+    image{
+      width: 100rpx;
+      height: 100rpx;
+    }
+  }
+  .ui-notebook__addbtn{
+    position: fixed;
+    left: 50%;
+    bottom: 130rpx;
+    transform: translate(-50%);
+    image{
+      width: 100rpx;
+      height: 100rpx;
+    }
+  }
+  .ui-notebook__input{
+    border-bottom: 1rpx solid #ccc;
+  }
+</style>
+<template>
+  <view class="container" wx:if="{{list && list.length > 0}}">
+
+    <notebooklist :list.sync="list" @getNoteBookList.user="getNoteBookList" @deleteNoteBook.user="deleteNoteBook" @editNoteBook.user="editNoteBook"></notebooklist>
+
+  </view>
+
+  <tabBar :tabBar="tabBar"></tabBar>
+
+  <view class="ui-note__nolist" wx:if="{{list && list.length == 0}}" @tap="addNoteBook">
+    <view class="block"><image src="../assets/images/note_book.png"></image></view>
+    <view class="block">暂无笔记本，点击添加笔记本</view>
+  </view>
+
+  <view class="ui-notebook__addbtn" @tap="addNoteBook">
+    <image src="../assets/images/add_notebook.png"></image>
+  </view>
+
+  <modal title="新建笔记本" hidden="{{modalHidden}}" bindcancel="onModalCancel" bindconfirm="onModalConfirm">
+    <view><input class="ui-notebook__input" placeholder="请输入名称" value="{{bookname}}" bindinput="onBindInput"></input></view>
+  </modal>
+
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import notebooklist from '@/components/notebooklist'
+  import tabBar from '@/components/tabBar'
+  import utils from '../common/util'
+  import _g from '../common/util'
+
+
+  export default class Notebook extends wepy.page {
+    config = {
+      navigationBarTitleText: '笔记列表'
+    }
+    components = {
+      notebooklist: notebooklist,
+      tabBar: tabBar
+    }
+
+    data = {
+      list: [
+        {
+          name: '12121',
+          createtime: '5-45'
+        }
+      ],
+      notebookId: '',
+      bookname: '',
+      modalHidden: true,
+      tabBar: {
+        "selectedColor": "#32b36e",
+        "list": [
+          {
+            "pagePath": "../pages/note_list",
+            "text": "所有",
+            "iconPath": "/assets/images/note.png",
+            "selectedIconPath": "/assets/images/note_select.png",
+            "selectedColor": "#32b36e",
+            "pageTum": "redirect",
+            "active": false
+          }, 
+          {
+            "pagePath": "../pages/note_add",
+            "text": "新增",
+            "iconPath": "/assets/images/add.png",
+            "selectedIconPath": "/assets/images/add_select.png",
+            "selectedColor": "#32b36e",
+            "pageTum": "navigate",
+            "active": false
+          }, 
+          {
+            "pagePath": "../pages/notebook",
+            "text": "笔记本",
+            "iconPath": "/assets/images/doc.png",
+            "selectedIconPath": "/assets/images/doc_select.png",
+            "selectedColor": "#32b36e",
+            "pageTum": "redirect",
+            "active": true
+          }
+        ]
+      }
+    }
+
+    computed = {
+      now () {
+        return +new Date()
+      }
+    }
+
+    editNote (url,data) {
+      var self = this;
+      _g.ajax('post', url, data,function(res){
+        if (res.data.success) {
+          self.getList();
+        }
+      },function(err){
+        console.log('err');
+        console.log(err);
+      });
+    }
+
+    onModalConfirm (e) {
+      console.log('确定')
+      var self = this;
+      self.modalHidden = true;
+      console.log(self.bookname)
+      if (!self.bookname) return;
+      if (self.notebookId) {
+        self.editNote('/note/edit_note_book', {bookname: self.bookname, notebookId: self.notebookId});
+      } else {
+        self.editNote('/note/add_note_book', {bookname: self.bookname});
+      }
+    }
+    onModalCancel (e) {
+      this.modalHidden = true;
+    }
+
+    onBindInput (e) {
+      this.bookname = e.detail.value;
+    }
+
+    methods = {
+      getNoteBookList (id) {
+        wx.navigateTo({
+          url: 'notebook_list?id=' + id
+        })
+      },
+      deleteNoteBook (id) {
+        var self = this;
+        _g.ajax('post', '/note/delete_note_book',{notebookId: id},function(res){
+          if (res.data.success) {
+            self.getList();
+          }
+        },function(err){
+          console.log('err');
+          console.log(err);
+        });
+      },
+      editNoteBook (id) {
+        console.log(this.$parent.globalData)
+        var self = this;
+        this.modalHidden = false;
+        _g.ajax('get', '/note/get_note_book',{notebookId: id},function(res){
+          if (res.data.success) {
+            self.bookname = res.data.object.bookname;
+            self.notebookId = res.data.object._id;
+            self.$apply();
+          }
+        },function(err){
+          console.log('err');
+          console.log(err);
+        });
+      },
+      addNote () {
+        wx.navigateTo({
+          url: 'note_add'
+        })
+      },
+      addNoteBook () {
+        this.notebookId = '';
+        this.bookname = '';
+        this.modalHidden = false;
+      }
+    }
+
+    events = {
+
+    }
+
+    getList () {
+      var self = this;
+      _g.ajax('post', '/note/get_all_notebook','',function(res){
+        self.list = res.data.object;
+        for( var v of self.list) {
+          v.createtime = _g.getTimes(v.createtime);
+        }
+        self.$apply();
+      },function(err){
+        console.log('err');
+        console.log(err);
+      });
+    }
+
+    onShow () {
+      var self = this;
+    }
+
+    onLoad() {
+      this.getList();
+    }
+  }
+</script>

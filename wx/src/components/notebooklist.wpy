@@ -1,0 +1,118 @@
+<style type="less">
+	.ui-note__list{
+		width: 100%;
+    margin-bottom: 110rpx;
+	}
+  .ui-note__line{
+    width: 100%;
+    height: auto;
+    overflow: auto;
+  }
+  .ui-note__line::-webkit-scrollbar {
+    display: none;
+  }
+  	.ui-note__item{
+  		border-bottom: 1rpx solid #ccc;
+  		width: 120%;
+  		padding: 10rpx 15rpx;
+      line-height: 50rpx;
+  	}
+    .ui-note__itemleft{
+      width: 70%;
+      height: 100%;
+      display: inline-block;
+      image{
+        width: 50rpx;
+        height: 50rpx;
+        display: inline-block;
+        vertical-align: middle;
+      }
+    }
+    .ui-note__itemmin{
+      width: 15%;
+      height: 150rpx;
+      display: flex;
+      background: #32b36e;
+      text-align: center;
+      justify-content: center;
+      align-items: center;
+      image{
+        width: 50rpx;
+        height: 50rpx;
+        display: inline-block;
+        vertical-align: middle;
+      }
+    }
+    .ui-note__itemright{
+      width: 15%;
+      height: 150rpx;
+      display: flex;
+      background: red;
+      text-align: center;
+      justify-content: center;
+      align-items: center;
+      image{
+        width: 50rpx;
+        height: 50rpx;
+        display: inline-block;
+        vertical-align: middle;
+      }
+    }
+    .ui-note__title {
+      font-size: 14px;
+      font-weight: bold;
+      margin-left: 10rpx;
+      display: inline-block;
+    }
+    .ui-note__time {
+      font-size: 12px;
+    }
+</style>
+<template>
+  <view class="ui-note__list">
+  	<repeat for="{{list}}" index="index" item="item" key="key">
+      <view class="ui-note__line">
+    		<view class="ui-note__item clearfix">
+          <view class="ui-note__itemleft fl" @tap="tap" data-id={{item._id}}>
+            <image src="../assets/images/notebook.png"></image>
+            <view class="ui-note__title">{{item.bookname}}</view>
+            <view class="ui-note__time">{{item.createtime}}</view>
+          </view>
+          <view class="ui-note__itemmin fl" @tap="editNoteBook" data-id={{item._id}}>
+            <image src="../assets/images/edit.png"></image>
+          </view>
+          <view class="ui-note__itemright fr" @tap="deleteNoteBook" data-id={{item._id}}>
+            <image src="../assets/images/delete.png"></image>
+          </view>
+    		</view>
+      </view>
+  	</repeat>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+
+  export default class Notebooklist extends wepy.component {
+    props = {
+      list: {
+      	type: Object,
+      	default: []
+      }
+    }
+
+    methods = {
+      tap (e) {
+        console.log('点击')
+        console.log(e)
+        console.log('232323')
+        this.$emit('getNoteBookList', e.currentTarget.dataset.id)
+      },
+      editNoteBook (e) {
+        this.$emit('editNoteBook', e.currentTarget.dataset.id)
+      },
+      deleteNoteBook (e) {
+        this.$emit('deleteNoteBook', e.currentTarget.dataset.id)
+      }
+    }
+  }
+</script>
