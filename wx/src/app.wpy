@@ -83,7 +83,8 @@ export default class extends wepy.app {
 
   globalData = {
     userInfo: null,
-    tabIndex: null
+    tabIndex: null,
+    notebook_id: null
   }
 
   constructor () {

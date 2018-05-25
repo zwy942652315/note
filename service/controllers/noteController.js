@@ -4,6 +4,7 @@ const Note = require('../models/note.js');
 async function createnote(ctx) {
     const title = ctx.request.body.title;
     const content = ctx.request.body.content;
+    const notebook_id = ctx.request.body.notebook_id ? ctx.request.body.notebook_id : '1';
     const tags = ctx.request.body.tags;
     if (title === '' && content === '') {
         // ctx.throw(400, '内容不能为空');
