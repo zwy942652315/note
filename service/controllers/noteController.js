@@ -4,8 +4,7 @@ const Note = require('../models/note.js');
 async function createnote(ctx) {
     const title = ctx.request.body.title;
     const content = ctx.request.body.content;
-    const notebook_id = ctx.request.body.notebook_id ? ctx.request.body.notebook_id : '1';
-    const tags = ctx.request.body.tags;
+    const notebook_id = ctx.request.body.notebook_id ? ctx.request.body.notebook_id : null;
     if (title === '' && content === '') {
         // ctx.throw(400, '内容不能为空');
         ctx.status = 400;
@@ -39,9 +38,10 @@ async function createnote(ctx) {
     const noteList = new Note({
         title,
         content,
-        tags
+        notebook_id
     });
     let createResult = await noteList.save().catch(err => {
+        console.log(err);
         ctx.throw(500, '服务器内部错误');
     });
     
@@ -56,13 +56,27 @@ async function createnote(ctx) {
 
 // 获取所有笔记列表
 async function getallnote (ctx) {
-    var res = await Note
-    .find({}, function (err, res) {
-      if (err) return handleError(err);
-        console.log('笔记列表');
-        console.log(res) // Space Ghost is a talk show host.
-    })
-    .sort({ createtime: -1 })
+    if (notebook_id) {
+        var res = await Note
+        .find({ notebook_id: notebook_id }, function (err, res) {
+            console.log(err);
+          if (err) return handleError(err);
+            console.log('笔记列表');
+            console.log(res) // Space Ghost is a talk show host.
+        })
+        .populate('notebook_id')
+        .sort({ createtime: -1 })
+    } else {
+        var res = await Note
+        .find({}, function (err, res) {
+            console.log(err);
+          if (err) return handleError(err);
+            console.log('笔记列表');
+            console.log(res) // Space Ghost is a talk show host.
+        })
+        .populate('notebook_id')
+        .sort({ createtime: -1 })
+    }
     ctx.body = {
         success: true,
         object: res,

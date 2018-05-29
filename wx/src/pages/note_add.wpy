@@ -103,6 +103,14 @@
       console.log(this.$parent.globalData.tabIndex);
       this.form.title = e.detail.value.title;
       this.form.content = e.detail.value.content;
+      if (this.$parent.globalData.tabIndex < 1) {
+        this.form = {
+          title :  e.detail.value.title,
+          content :  e.detail.value.content
+        }
+      } else {
+        this.form.notebook_id = this.$parent.globalData.notebook_id;
+      }
       console.log(this.form);
       if (this.noteId) {
         this.form.noteId = this.noteId;

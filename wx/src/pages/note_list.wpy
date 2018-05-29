@@ -55,7 +55,7 @@
 
     data = {
       list: [],
-
+      notebook_id: '',
       tabBar: {
         "selectedColor": "#32b36e",
         "list": [
@@ -126,7 +126,7 @@
 
     getList () {
       var self = this;
-      _g.ajax('post', '/note/get_all_note','',function(res){
+      _g.ajax('get', '/note/get_all_note',{notebook_id: self.notebook_id} ,function(res){
         self.list = res.data.object;
         for( var v of self.list) {
           v.createtime = _g.getTimes(v.createtime);
@@ -142,7 +142,10 @@
       var self = this;
     }
 
-    onLoad() {
+    onLoad(option) {
+      console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
+      console.log(option)
+      this.notebook_id = option && option.id ? option.id : '';
       this.getList();
     }
   }

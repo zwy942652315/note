@@ -36,8 +36,8 @@ async function getallnotebook (ctx) {
     var res = await Notebook
     .find({}, function (err, res) {
       if (err) return handleError(err);
-        console.log('笔记本列表');
-        console.log(res) // Space Ghost is a talk show host.
+        // console.log('笔记本列表');
+        // console.log(res) // Space Ghost is a talk show host.
     })
     .sort({ createtime: -1 })
     ctx.body = {

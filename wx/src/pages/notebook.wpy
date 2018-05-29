@@ -146,8 +146,9 @@
 
     methods = {
       getNoteBookList (id) {
+        this.$parent.globalData.notebook_id = id;
         wx.navigateTo({
-          url: 'notebook_list?id=' + id
+          url: 'note_list?id=' + id
         })
       },
       deleteNoteBook (id) {

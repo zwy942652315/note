@@ -48,6 +48,7 @@
     methods = {
       getTabIndex (e) {
         this.$parent.$parent.globalData.tabIndex = e.currentTarget.dataset.index;
+        console.log('tab索引:'+this.$parent.$parent.globalData.tabIndex)
       }
     }
   }
