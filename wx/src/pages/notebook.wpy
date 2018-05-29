@@ -39,9 +39,7 @@
     <image src="../assets/images/add_notebook.png"></image>
   </view>
 
-  <modal title="新建笔记本" hidden="{{modalHidden}}" bindcancel="onModalCancel" bindconfirm="onModalConfirm">
-    <view><input class="ui-notebook__input" placeholder="请输入名称" value="{{bookname}}" bindinput="onBindInput"></input></view>
-  </modal>
+  <modal title="新建笔记本" :modalHidden.sync="modalHidden" :inputValue.sync="bookname" @onModalCancel.user="onModalCancel" @onModalConfirm.user="onModalConfirm" @onBindInput.user="onBindInput"></modal>
 
 </template>
 
@@ -49,6 +47,7 @@
   import wepy from 'wepy'
   import notebooklist from '@/components/notebooklist'
   import tabBar from '@/components/tabBar'
+  import modal from '@/components/modal'
   import utils from '../common/util'
   import _g from '../common/util'
 
@@ -59,7 +58,8 @@
     }
     components = {
       notebooklist: notebooklist,
-      tabBar: tabBar
+      tabBar: tabBar,
+      modal: modal
     }
 
     data = {
@@ -123,26 +123,7 @@
         console.log(err);
       });
     }
-
-    onModalConfirm (e) {
-      console.log('确定')
-      var self = this;
-      self.modalHidden = true;
-      console.log(self.bookname)
-      if (!self.bookname) return;
-      if (self.notebookId) {
-        self.editNote('/note/edit_note_book', {bookname: self.bookname, notebookId: self.notebookId});
-      } else {
-        self.editNote('/note/add_note_book', {bookname: self.bookname});
-      }
-    }
-    onModalCancel (e) {
-      this.modalHidden = true;
-    }
-
-    onBindInput (e) {
-      this.bookname = e.detail.value;
-    }
+ 
 
     methods = {
       getNoteBookList (id) {
@@ -186,6 +167,23 @@
         this.notebookId = '';
         this.bookname = '';
         this.modalHidden = false;
+        console.log(this.modalHidden)
+      },
+      onModalConfirm () {
+        var self = this;
+        self.modalHidden = true;
+        if (!self.bookname) return;
+        if (self.notebookId) {
+          self.editNote('/note/edit_note_book', {bookname: self.bookname, notebookId: self.notebookId});
+        } else {
+          self.editNote('/note/add_note_book', {bookname: self.bookname});
+        }
+      },
+      onModalCancel () {
+        this.modalHidden = true;
+      },
+      onBindInput (value) {
+        this.bookname = value;
       }
     }
 
