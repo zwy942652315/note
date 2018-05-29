@@ -73,15 +73,15 @@
   	<repeat for="{{list}}" index="index" item="item" key="key">
       <view class="ui-note__line">
     		<view class="ui-note__item clearfix">
-          <view class="ui-note__itemleft fl" @tap="tap" data-id={{item._id}}>
+          <view class="ui-note__itemleft fl" @tap="tap" data-id="{{item._id}}">
             <image src="../assets/images/notebook.png"></image>
             <view class="ui-note__title">{{item.bookname}}</view>
             <view class="ui-note__time">{{item.createtime}}</view>
           </view>
-          <view class="ui-note__itemmin fl" @tap="editNoteBook" data-id={{item._id}}>
+          <view class="ui-note__itemmin fl" @tap="editNoteBook" data-id="{{item._id}}">
             <image src="../assets/images/edit.png"></image>
           </view>
-          <view class="ui-note__itemright fr" @tap="deleteNoteBook" data-id={{item._id}}>
+          <view class="ui-note__itemright fr" @tap="deleteNoteBook" data-id="{{item._id}}">
             <image src="../assets/images/delete.png"></image>
           </view>
     		</view>

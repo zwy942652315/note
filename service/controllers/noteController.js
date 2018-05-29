@@ -56,6 +56,7 @@ async function createnote(ctx) {
 
 // 获取所有笔记列表
 async function getallnote (ctx) {
+    const notebook_id = ctx.query.notebook_id;
     if (notebook_id) {
         var res = await Note
         .find({ notebook_id: notebook_id }, function (err, res) {
