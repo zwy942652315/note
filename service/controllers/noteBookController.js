@@ -1,4 +1,5 @@
 const Notebook = require('../models/notebook.js');
+const Note = require('../models/note.js');
 
 // 新增一个笔记本
 async function createnotebook(ctx) {
@@ -11,6 +12,19 @@ async function createnotebook(ctx) {
             success: false,
             object: null,
             mssage: '标题不能为空'
+        };
+        return;
+    }
+
+    // 判断笔记本名称是否重复
+    var res = await Notebook
+    .findOne({'bookname': bookname}, function (err, res) {
+      if (err) return handleError(err);
+    })
+    if (res !== null) {
+        ctx.body = {
+            success: true,
+            mssage: '笔记本名称重复，请重新创建'
         };
         return;
     }
@@ -66,10 +80,18 @@ async function getnotebook (ctx) {
 // 删除某一个笔记本
 async function deletenotebook (ctx) {
     const notebookId = ctx.request.body.notebookId;
+
     await Notebook.remove({_id: notebookId}, function(err, docs){
       if (err) return handleError(err);
       console.log('docs 就是mongodb返回的删除状态的falg ', docs);
     });
+
+    // 删除该笔记本下的所有笔记
+    await Note.remove({notebook_id: notebookId}, function(err, docs){
+      if (err) return handleError(err);
+      console.log('docs 就是mongodb返回的删除状态的falg ', docs);
+    });
+
     ctx.body = {
         success: true,
         object: null,
