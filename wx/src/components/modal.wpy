@@ -21,7 +21,7 @@
     }
     .ui-modal__content{
       width: 85%;
-      height: 30%;
+      height: auto;
       background: #fff;
       border-radius: 10rpx;
       position: fixed;
@@ -29,28 +29,30 @@
       top: 50%;
       z-index: 99999;
       transform: translate(-50%, -50%);
-      .ui-modal__title{
-        width: 100%;
-        margin:50rpx 0 30rpx;
-        text-align: center;
-        font-size: 45rpx;
-      }
-      .ui-notebook__input{
-        width: 80%;
-        margin: 50rpx auto;
-        display: block;
-      }
-      .ui-modal__bottom{
-        width: 100%;
-        height: auto;
-        display: flex !important;
-        .ui-modal__btn{
-          flex: 1;
-          border-radius: 0rpx !important;
-          &:nth-child(2){
-            color: #fff;
-            background: #32b36e;
-          }
+    }
+    .ui-modal__title{
+      width: 100%;
+      margin:50rpx 0 30rpx;
+      text-align: center;
+      font-size: 45rpx;
+    }
+    .ui-modal__main{
+      width: 100%;
+      height: auto;
+      text-align: center;
+      font-size: 35rpx;
+      display: block;
+    }
+    .ui-modal__bottom{
+      width: 100%;
+      height: auto;
+      display: flex !important;
+      .ui-modal__btn{
+        flex: 1;
+        border-radius: 0rpx !important;
+        &:nth-child(2){
+          color: #fff;
+          background: #32b36e;
         }
       }
     }
@@ -60,10 +62,10 @@
   <view class="{{modalHidden? 'isHide' : 'isShow'}} ui-modal__box">
     <view class="ui-modal__content">
       <view class="ui-modal__title"><text>{{title}}</text></view>
-      <input class="ui-notebook__input" placeholder="请输入名称" value="{{inputValue}}" bindinput="onBindInput"></input>
+      <slot></slot>
       <view class="ui-modal__bottom">
-        <button class="ui-modal__btn" bindtap="onModalCancel">取消</button>
-        <button class="ui-modal__btn" bindtap="onModalConfirm">确定</button>
+        <button class="ui-modal__btn" bindtap="onModalCancel">{{cancelText}}</button>
+        <button class="ui-modal__btn" bindtap="onModalConfirm">{{confirmText}}</button>
       </view>
     </view>
     <view class="ui-modal__mask" bindtap="onModalCancel"></view>
@@ -82,9 +84,13 @@
         type: String,
         default: ''
       },
-      inputValue: {
+      confirmText: {
         type: String,
-        default: ''
+        default: '确定'
+      },
+      cancelText: {
+        type: String,
+        default: '取消'
       },
       modalHidden: {
         type: Boolean,
@@ -99,9 +105,6 @@
       onModalCancel (e) {
         console.log(e)
         this.$emit('onModalCancel')
-      },
-      onBindInput (e) {
-        this.$emit('onBindInput', e.detail.value)
       }
     }
   }

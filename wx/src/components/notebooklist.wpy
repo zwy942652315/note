@@ -102,9 +102,6 @@
 
     methods = {
       tap (e) {
-        console.log('点击')
-        console.log(e)
-        console.log('232323')
         this.$emit('getNoteBookList', e.currentTarget.dataset.id)
       },
       editNoteBook (e) {
