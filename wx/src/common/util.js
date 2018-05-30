@@ -31,7 +31,16 @@ const getTimes = (t) => {
     return year + '-' + month + '-' + date + ' ' + hours + ':' + min + ':' + second;
 }
 
+const toast = (msg) => {
+    wx.showToast({
+      title: msg,
+      icon: 'none',
+      duration: 2000
+    })
+}
+
 module.exports = {
 	ajax: ajax,
-	getTimes: getTimes
+	getTimes: getTimes,
+	toast: toast
 }

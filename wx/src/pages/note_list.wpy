@@ -13,21 +13,6 @@
 
     <notelist :list.sync="list" @editNote.user="edit" @deleteNote.user="deleteNote"></notelist>
 
-    <!-- <view class="ui-note__tab">
-      <view class="ui-note__tabItem">
-        <view class="block"><image src="../assets/images/note_select.png"></image></view>
-        <view class="block"><text class="mainColor">所有</text></view>
-      </view>
-      <view class="ui-note__tabItem" @tap="addNote">
-        <view class="block"><image src="../assets/images/add.png"></image></view>
-        <view class="block"><text>新增</text></view>
-      </view>
-      <view class="ui-note__tabItem" @tap="addNote">
-        <view class="block"><image src="../assets/images/doc_select.png"></image></view>
-        <view class="block"><text>文件夹</text></view>
-      </view>
-    </view> -->
-
   </view>
   <tabBar :tabBar="tabBar"></tabBar>
   <view class="ui-note__nolist" wx:if="{{list && list.length == 0}}" @tap="addNote">
@@ -106,6 +91,7 @@
         var self = this;
         _g.ajax('post', '/note/delete_note',{noteId: id},function(res){
           if (res.data.success) {
+            _g.toast(res.data.message);
             self.getList();
           }
         },function(err){

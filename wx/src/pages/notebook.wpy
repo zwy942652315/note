@@ -121,6 +121,7 @@
       var self = this;
       _g.ajax('post', url, data,function(res){
         if (res.data.success) {
+          _g.toast(res.data.message);
           self.getList();
         }
       },function(err){
@@ -141,6 +142,7 @@
         var self = this;
         _g.ajax('post', '/note/delete_note_book',{notebookId: id},function(res){
           if (res.data.success) {
+            _g.toast(res.data.message);
             self.getList();
           }
         },function(err){
@@ -172,12 +174,14 @@
         this.notebookId = '';
         this.bookname = '';
         this.modalHidden = false;
-        console.log(this.modalHidden)
       },
       onModalConfirm () {
         var self = this;
         self.modalHidden = true;
-        if (!self.bookname) return;
+        if (!self.bookname) {
+          _g.toast('笔记本名称不能为空');
+          return;
+        }
         if (self.notebookId) {
           self.editNote('/note/edit_note_book', {bookname: self.bookname, notebookId: self.notebookId});
         } else {

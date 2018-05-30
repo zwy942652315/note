@@ -4,14 +4,14 @@ const Note = require('../models/note.js');
 async function createnote(ctx) {
     const title = ctx.request.body.title;
     const content = ctx.request.body.content;
-    const notebook_id = ctx.request.body.notebook_id ? ctx.request.body.notebook_id : null;
+    const notebook_id = ctx.request.body.notebook_id  !== 'null' ? ctx.request.body.notebook_id : null;
     if (title === '' && content === '') {
         // ctx.throw(400, '内容不能为空');
         ctx.status = 400;
         ctx.body = {
             success: false,
             object: null,
-            mssage: '标题和内容都不能为空'
+            message: '标题和内容都不能为空'
         };
         return;
     }
@@ -21,7 +21,7 @@ async function createnote(ctx) {
         ctx.body = {
             success: false,
             object: null,
-            mssage: '标题不能为空'
+            message: '标题不能为空'
         };
         return;
     }
@@ -31,7 +31,7 @@ async function createnote(ctx) {
         ctx.body = {
             success: false,
             object: null,
-            mssage: '内容不能为空'
+            message: '内容不能为空'
         };
         return;
     }
@@ -49,7 +49,7 @@ async function createnote(ctx) {
     ctx.body = {
         success: true,
         object: createResult,
-        mssage: '笔记创建成功'
+        message: '笔记创建成功'
     };
 
 }
@@ -81,7 +81,7 @@ async function getallnote (ctx) {
     ctx.body = {
         success: true,
         object: res,
-        mssage: '获取笔记列表成功'
+        message: '获取笔记列表成功'
     };
 }
 
@@ -97,7 +97,7 @@ async function getnote (ctx) {
     ctx.body = {
         success: true,
         object: res,
-        mssage: '查询成功'
+        message: '查询成功'
     };
 }
 
@@ -115,7 +115,7 @@ async function editnote (ctx) {
     ctx.body = {
         success: true,
         object: null,
-        mssage: '修改成功'
+        message: '修改成功'
     };
 }
 
@@ -129,7 +129,7 @@ async function deletenote (ctx) {
     ctx.body = {
         success: true,
         object: null,
-        mssage: '删除成功'
+        message: '删除成功'
     };
 }
 

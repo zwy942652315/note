@@ -89,9 +89,14 @@
 
     editNote (url) {
       _g.ajax('post', url,this.form,function(res){
-          wx.navigateTo({
-            url: 'note_list'
-          });
+        if (res.data.success) {
+          _g.toast(res.data.message);
+          setTimeout(()=>{
+            wx.navigateTo({
+              url: 'note_list'
+            });
+          },1000)
+        }
         },function(err){
           console.log('err');
           console.log(err);

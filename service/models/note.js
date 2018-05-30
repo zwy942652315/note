@@ -12,7 +12,7 @@ var noteListSchema = new Schema({
 		type: String,
 		default: ''
 	},
-	notebook_id: { type: Schema.Types.ObjectId, ref: 'notebook' } 
+	notebook_id: { type: Schema.Types.ObjectId, ref: 'notebook'} 
 },
 	{timestamps: {createdAt: 'createtime', updatedAt: 'modifytime'}}
 )

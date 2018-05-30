@@ -11,7 +11,7 @@ async function createnotebook(ctx) {
         ctx.body = {
             success: false,
             object: null,
-            mssage: '标题不能为空'
+            message: '标题不能为空'
         };
         return;
     }
@@ -24,7 +24,7 @@ async function createnotebook(ctx) {
     if (res !== null) {
         ctx.body = {
             success: true,
-            mssage: '笔记本名称重复，请重新创建'
+            message: '笔记本名称重复，请重新命名'
         };
         return;
     }
@@ -40,7 +40,7 @@ async function createnotebook(ctx) {
     ctx.body = {
         success: true,
         object: createResult,
-        mssage: '笔记本创建成功'
+        message: '笔记本创建成功'
     };
 
 }
@@ -57,7 +57,7 @@ async function getallnotebook (ctx) {
     ctx.body = {
         success: true,
         object: res,
-        mssage: '获取笔记本列表成功'
+        message: '获取笔记本列表成功'
     };
 }
 
@@ -73,7 +73,7 @@ async function getnotebook (ctx) {
     ctx.body = {
         success: true,
         object: res,
-        mssage: '查询成功'
+        message: '查询成功'
     };
 }
 
@@ -95,7 +95,7 @@ async function deletenotebook (ctx) {
     ctx.body = {
         success: true,
         object: null,
-        mssage: '删除成功'
+        message: '删除成功'
     };
 }
 
@@ -112,7 +112,7 @@ async function editnotebook (ctx) {
     ctx.body = {
         success: true,
         object: null,
-        mssage: '修改成功'
+        message: '修改成功'
     };
 }
 
