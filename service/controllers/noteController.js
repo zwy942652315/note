@@ -57,6 +57,9 @@ async function createnote(ctx) {
 // 获取所有笔记列表
 async function getallnote (ctx) {
     const notebook_id = ctx.query.notebook_id;
+    const page = ctx.query.page;
+    const pageSize = ctx.query.pageSize;
+    const skip = (page - 1) * pageSize;
     if (notebook_id) {
         var res = await Note
         .find({ notebook_id: notebook_id }, function (err, res) {
@@ -65,6 +68,8 @@ async function getallnote (ctx) {
             console.log('笔记列表');
             console.log(res) // Space Ghost is a talk show host.
         })
+        .limit(10)
+        .skip(skip)
         .populate('notebook_id')
         .sort({ createtime: -1 })
     } else {
@@ -75,6 +80,8 @@ async function getallnote (ctx) {
             console.log('笔记列表');
             console.log(res) // Space Ghost is a talk show host.
         })
+        .limit(10)
+        .skip(skip)
         .populate('notebook_id')
         .sort({ createtime: -1 })
     }

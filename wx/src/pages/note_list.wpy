@@ -10,8 +10,9 @@
 </style>
 <template>
   <view class="container" wx:if="{{list && list.length > 0}}">
-
-    <notelist :list.sync="list" @editNote.user="edit" @deleteNote.user="deleteNote"></notelist>
+    <scroll-view scroll-y style="height:{{height}}px" bindscrolltoupper="upper" bindscrolltolower="lower" bindscroll="scroll" scroll-into-view="{{toView}}" scroll-top="{{scrollTop}}">
+      <notelist :list.sync="list" @editNote.user="edit" @deleteNote.user="deleteNote"></notelist>
+    </scroll-view>
 
   </view>
   <tabBar :tabBar="tabBar"></tabBar>
@@ -39,6 +40,12 @@
     }
 
     data = {
+      height: '',
+      toView: 'red',
+      scrollTop: 100,
+      page: 1,
+      pageSize: 10,
+
       list: [],
       notebook_id: '',
       tabBar: {
@@ -82,6 +89,19 @@
     }
 
     methods = {
+      upper: function(e) {
+        console.log('顶部')
+        console.log(e)
+      },
+      lower: function(e) {
+        console.log('底部')
+        console.log(e)
+        this.page++;
+      },
+      scroll: function(e) {
+        // console.log('滚动')
+        // console.log(e)
+      },
       edit (id) {
         wx.navigateTo({
           url: 'note_add?id=' + id
@@ -112,7 +132,7 @@
 
     getList () {
       var self = this;
-      _g.ajax('get', '/note/get_all_note',{notebook_id: self.notebook_id} ,function(res){
+      _g.ajax('get', '/note/get_all_note',{notebook_id: self.notebook_id, page: self.page, pageSize: self.pageSize} ,function(res){
         self.list = res.data.object;
         for( var v of self.list) {
           v.createtime = _g.getTimes(v.createtime);
@@ -133,6 +153,11 @@
       console.log(option)
       this.notebook_id = option && option.id ? option.id : '';
       this.getList();
+      wx.getSystemInfo({
+        success: (res) => {
+          this.height = res.windowHeight;
+        }
+      })
     }
   }
 </script>
