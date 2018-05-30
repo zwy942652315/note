@@ -10,10 +10,10 @@
 </style>
 <template>
   <view class="container" wx:if="{{list && list.length > 0}}">
-    <scroll-view scroll-y style="height:{{height}}px" bindscrolltoupper="upper" bindscrolltolower="lower" bindscroll="scroll" scroll-into-view="{{toView}}" scroll-top="{{scrollTop}}">
+    <scroll-view scroll-y style="height:{{height}}px" bindscrolltolower="lower" scroll-into-view="{{toView}}" scroll-top="{{scrollTop}}">
       <notelist :list.sync="list" @editNote.user="edit" @deleteNote.user="deleteNote"></notelist>
+      <view class="{{isBottom ? 'block' : 'none'}} ui-list__none">没有更多了</view>
     </scroll-view>
-
   </view>
   <tabBar :tabBar="tabBar"></tabBar>
   <view class="ui-note__nolist" wx:if="{{list && list.length == 0}}" @tap="addNote">
@@ -45,7 +45,7 @@
       scrollTop: 100,
       page: 1,
       pageSize: 10,
-
+      isBottom: false,
       list: [],
       notebook_id: '',
       tabBar: {
@@ -89,18 +89,13 @@
     }
 
     methods = {
-      upper: function(e) {
-        console.log('顶部')
-        console.log(e)
-      },
       lower: function(e) {
         console.log('底部')
         console.log(e)
         this.page++;
-      },
-      scroll: function(e) {
-        // console.log('滚动')
-        // console.log(e)
+        if (!this.isBottom) {
+          this.getList();
+        }
       },
       edit (id) {
         wx.navigateTo({
@@ -133,10 +128,25 @@
     getList () {
       var self = this;
       _g.ajax('get', '/note/get_all_note',{notebook_id: self.notebook_id, page: self.page, pageSize: self.pageSize} ,function(res){
-        self.list = res.data.object;
+        if (res.data.object && res.data.object.length ===0) {
+          self.isBottom = true;
+        }
+
+        wx.showLoading({ //期间为了显示效果可以添加一个过度的弹出框提示“加载中”  
+          title: '加载中',
+          icon: 'loading',
+        });
+        if (self.page == 1) {
+          self.list = res.data.object;
+        } else {
+          self.list = self.list.concat(res.data.object);
+        }
         for( var v of self.list) {
           v.createtime = _g.getTimes(v.createtime);
         }
+        setTimeout(() => {
+          wx.hideLoading()
+        }, 1000)
         self.$apply();
       },function(err){
         console.log('err');
@@ -155,7 +165,7 @@
       this.getList();
       wx.getSystemInfo({
         success: (res) => {
-          this.height = res.windowHeight;
+          this.height = res.windowHeight - 61;
         }
       })
     }

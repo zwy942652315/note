@@ -68,7 +68,7 @@ async function getallnote (ctx) {
             console.log('笔记列表');
             console.log(res) // Space Ghost is a talk show host.
         })
-        .limit(10)
+        .limit(pageSize)
         .skip(skip)
         .populate('notebook_id')
         .sort({ createtime: -1 })
@@ -80,7 +80,7 @@ async function getallnote (ctx) {
             console.log('笔记列表');
             console.log(res) // Space Ghost is a talk show host.
         })
-        .limit(10)
+        .limit(pageSize)
         .skip(skip)
         .populate('notebook_id')
         .sort({ createtime: -1 })

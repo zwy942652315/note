@@ -8,6 +8,11 @@
   justify-content: space-between;
   box-sizing: border-box;
 }
+.ui-list__none{
+  text-align: center;
+  padding: 10rpx 0;
+  font-size: 30rpx;
+}
 .clearfix:after {
     display: block;
     clear: both;
