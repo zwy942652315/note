@@ -51,7 +51,7 @@ export default class extends wepy.app {
       'pages/note_list',
       'pages/note_add',
       'pages/notebook',
-      'pages/toast'
+      'pages/note_my'
     ],
     window: {
       backgroundTextStyle: 'light',

@@ -1,29 +1,53 @@
 <style lang="less">
-  .ui-note__nolist{
-    text-align: center;
-    margin: 100rpx auto;
-    image{
-      width: 100rpx;
+  .ui-my__box{
+    width: 100%;
+    height: 410rpx;
+    background: #32b36e;
+    .ui-my__avatar{
+      width: 200rpx;
+      height: 200rpx;
+      margin: 0 auto;
+      padding: 50rpx 0;
+      border-radius: 50%;
+      .ui-my__image{
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        overflow: hidden;
+      }
+    }
+    .ui-my__name{
+      width: 100%;
       height: 100rpx;
+      font-size: 50rpx;
+      text-align: center;
+      color: #fff;
+    }
+  }
+  .ui-my__list{
+    width: 100%;
+    height: auto;
+    .ui-my__item{
+      width: 100%;
+      height: 100rpx;
+      line-height: 100rpx;
+      font-size: 30rpx;
+      text-indent: 20rpx;
+      border-bottom: 1rpx solid #ccc;
     }
   }
 </style>
 <template>
-  <view class="container" wx:if="{{list && list.length > 0}}">
-    <scroll-view scroll-y style="height:{{height}}px" bindscrolltolower="lower" scroll-top="{{scrollTop}}">
-      <refresh :scrollTop.sync="scrollTop">
-        <view slot="refresh-content" style="margin-top:45px;">
-          <notelist :list.sync="list" @editNote.user="edit" @deleteNote.user="deleteNote"></notelist>
-          <view class="{{isBottom ? 'block' : 'none'}} ui-list__none">没有更多了</view>
-        </view>
-      </refresh>
-    </scroll-view>
+  <view class="ui-my__box">
+    <view class="ui-my__avatar">
+      <view class="ui-my__image"><open-data type="userAvatarUrl"></open-data></view>
+    </view>
+    <view class="ui-my__name"><open-data type="userNickName"></open-data></view>
+  </view>
+  <view class="ui-my__list">
+    <view class="ui-my__item">我的收藏</view>
   </view>
   <tabBar :tabBar="tabBar"></tabBar>
-  <view class="ui-note__nolist" wx:if="{{list && list.length == 0}}" @tap="addNote">
-    <view class="block"><image src="../assets/images/none.png"></image></view>
-    <view class="block">暂无笔记，点击添加笔记</view>
-  </view>
 </template>
 
 <script>
@@ -35,9 +59,9 @@
   import Refresh from 'wepy-scroll-view-refresh'
 
 
-  export default class Index extends wepy.page {
+  export default class My extends wepy.page {
     config = {
-      navigationBarTitleText: '笔记列表'
+      navigationBarTitleText: '我的'
     }
     components = {
       notelist: notelist,
@@ -46,6 +70,9 @@
     }
 
     data = {
+      avatar: '../assets/images/avatar.png',
+
+
       height: '',
       scrollTop: 0,
       page: 1,
@@ -63,7 +90,7 @@
             "selectedIconPath": "/assets/images/note_select.png",
             "selectedColor": "#32b36e",
             "pageTum": "redirect",
-            "active": true
+            "active": false
           }, 
           {
             "pagePath": "../pages/note_add",
@@ -90,7 +117,7 @@
             "selectedIconPath": "/assets/images/my_select.png",
             "selectedColor": "#32b36e",
             "pageTum": "redirect",
-            "active": false
+            "active": true
           }
         ]
       }
@@ -102,7 +129,7 @@
         console.log('data: ', data)
         setTimeout(() => {
           self.getList(1);
-          self.$invoke('refresh', 'reset')
+          self.$invoke('refresh', 'reset');
         }, 1500)
       }
     }
@@ -189,6 +216,8 @@
           this.height = res.windowHeight - 61;
         }
       })
+      console.log('用户信息：')
+      console.log(this.$parent.globalData);
     }
   }
 </script>

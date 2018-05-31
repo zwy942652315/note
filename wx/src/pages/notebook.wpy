@@ -113,6 +113,15 @@
             "selectedColor": "#32b36e",
             "pageTum": "redirect",
             "active": true
+          },
+          {
+            "pagePath": "../pages/note_my",
+            "text": "我的",
+            "iconPath": "/assets/images/my.png",
+            "selectedIconPath": "/assets/images/my_select.png",
+            "selectedColor": "#32b36e",
+            "pageTum": "redirect",
+            "active": false
           }
         ]
       }
@@ -150,7 +159,7 @@
         _g.ajax('post', url, data,function(res){
           if (res.data.success) {
             _g.toast(res.data.message);
-            self.getList(this.page);
+            self.getList(self.page);
           }
         },function(err){
           console.log('err');
