@@ -30,3 +30,6 @@ appid：wxa2ad8db3f9bb939c
 └── package.json           项目的package配置
 
 
+注意：
+	做列表的下拉刷新时，由于官方scroll-view组件不支持下拉刷新onPullDownRefresh，只有滚到顶部刷新的机制，所以做一个基于scroll-view的下拉刷新组件
+		https://github.com/Chaunjie/weapp-scroll-view-refresh

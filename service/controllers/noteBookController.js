@@ -47,12 +47,17 @@ async function createnotebook(ctx) {
 
 // 获取所有笔记本列表
 async function getallnotebook (ctx) {
+    const page = Number(ctx.query.page);
+    const pageSize = Number(ctx.query.pageSize);
+    const skip = (page - 1) * pageSize;
     var res = await Notebook
     .find({}, function (err, res) {
       if (err) return handleError(err);
         // console.log('笔记本列表');
         // console.log(res) // Space Ghost is a talk show host.
     })
+    .limit(pageSize)
+    .skip(skip)
     .sort({ createtime: -1 })
     ctx.body = {
         success: true,

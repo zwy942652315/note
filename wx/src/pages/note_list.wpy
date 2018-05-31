@@ -10,9 +10,13 @@
 </style>
 <template>
   <view class="container" wx:if="{{list && list.length > 0}}">
-    <scroll-view scroll-y style="height:{{height}}px" bindscrolltolower="lower" scroll-into-view="{{toView}}" scroll-top="{{scrollTop}}">
-      <notelist :list.sync="list" @editNote.user="edit" @deleteNote.user="deleteNote"></notelist>
-      <view class="{{isBottom ? 'block' : 'none'}} ui-list__none">没有更多了</view>
+    <scroll-view scroll-y style="height:{{height}}px" bindscrolltolower="lower" scroll-top="{{scrollTop}}">
+      <refresh :scrollTop.sync="scrollTop">
+        <view slot="refresh-content" style="margin-top:45px;">
+          <notelist :list.sync="list" @editNote.user="edit" @deleteNote.user="deleteNote"></notelist>
+          <view class="{{isBottom ? 'block' : 'none'}} ui-list__none">没有更多了</view>
+        </view>
+      </refresh>
     </scroll-view>
   </view>
   <tabBar :tabBar="tabBar"></tabBar>
@@ -28,6 +32,7 @@
   import tabBar from '@/components/tabBar'
   import utils from '../common/util'
   import _g from '../common/util'
+  import Refresh from 'wepy-scroll-view-refresh'
 
 
   export default class Index extends wepy.page {
@@ -36,13 +41,13 @@
     }
     components = {
       notelist: notelist,
-      tabBar: tabBar
+      tabBar: tabBar,
+      refresh: Refresh
     }
 
     data = {
       height: '',
-      toView: 'red',
-      scrollTop: 100,
+      scrollTop: 0,
       page: 1,
       pageSize: 10,
       isBottom: false,
@@ -82,6 +87,17 @@
       }
     }
 
+    events = {
+      'refresh': (data) => {
+        var self = this;
+        console.log('data: ', data)
+        setTimeout(() => {
+          self.getList(1);
+          self.$invoke('refresh', 'reset')
+        }, 1500)
+      }
+    }
+
     computed = {
       now () {
         return +new Date()
@@ -94,7 +110,7 @@
         console.log(e)
         this.page++;
         if (!this.isBottom) {
-          this.getList();
+          this.getList(this.page);
         }
       },
       edit (id) {
@@ -107,7 +123,7 @@
         _g.ajax('post', '/note/delete_note',{noteId: id},function(res){
           if (res.data.success) {
             _g.toast(res.data.message);
-            self.getList();
+            self.getList(self.page);
           }
         },function(err){
           console.log('err');
@@ -121,13 +137,9 @@
       }
     }
 
-    events = {
-
-    }
-
-    getList () {
+    getList (page) {
       var self = this;
-      _g.ajax('get', '/note/get_all_note',{notebook_id: self.notebook_id, page: self.page, pageSize: self.pageSize} ,function(res){
+      _g.ajax('get', '/note/get_all_note',{notebook_id: self.notebook_id, page: page, pageSize: self.pageSize} ,function(res){
         if (res.data.object && res.data.object.length ===0) {
           self.isBottom = true;
         }
@@ -162,7 +174,7 @@
       console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
       console.log(option)
       this.notebook_id = option && option.id ? option.id : '';
-      this.getList();
+      this.getList(1);
       wx.getSystemInfo({
         success: (res) => {
           this.height = res.windowHeight - 61;

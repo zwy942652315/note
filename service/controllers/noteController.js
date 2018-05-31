@@ -57,8 +57,8 @@ async function createnote(ctx) {
 // 获取所有笔记列表
 async function getallnote (ctx) {
     const notebook_id = ctx.query.notebook_id;
-    const page = ctx.query.page;
-    const pageSize = ctx.query.pageSize;
+    const page = Number(ctx.query.page);
+    const pageSize = Number(ctx.query.pageSize);
     const skip = (page - 1) * pageSize;
     if (notebook_id) {
         var res = await Note

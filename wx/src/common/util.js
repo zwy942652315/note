@@ -1,7 +1,9 @@
 const ajax = (type,url,data,success,error) => {
+	// var host = 'http://120.79.44.8:88';
+	var host = 'http://127.0.0.1:3000'
 	wx.request({
 		method: type,
-	    url: 'http://127.0.0.1:3000' + url,
+	    url: host + url,
 		data: data,
         header: {
             'content-type': 'application/x-www-form-urlencoded', // 默认值

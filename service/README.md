@@ -38,3 +38,36 @@ http://www.ruanyifeng.com/blog/2017/08/koa.html
 	}
 	其中created和updated为自动记录时间的字段名，分别记录创建时间与更新时间，可以自定义。
 
+
+
+nginx配置：
+	server {
+	    listen 80;
+	    server_name note.com www.note.com; # 改成你自己的域名
+	    root /home/at/wx;
+	    set $node_port 3000;
+
+	    index index.js index.html index.htm;
+	    if ( -f $request_filename/index.html ){
+	        rewrite (.*) $1/index.html break;
+	    }
+	    if ( !-f $request_filename ){
+	        rewrite (.*) /index.js;
+	    }
+	    location = /index.js {
+	        proxy_http_version 1.1;
+	        proxy_set_header X-Real-IP $remote_addr;
+	        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+	        proxy_set_header Host $http_host;
+	        proxy_set_header X-NginX-Proxy true;
+	        proxy_set_header Upgrade $http_upgrade;
+	        proxy_set_header Connection "upgrade";
+	        proxy_pass http://120.79.44.8:$node_port$request_uri;
+	        proxy_redirect off;
+	    }
+
+	    location ~ /static/ {
+	        etag         on;
+	        expires      max;
+	    }
+	}

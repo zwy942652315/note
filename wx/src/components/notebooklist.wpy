@@ -1,7 +1,6 @@
 <style type="less">
 	.ui-note__list{
 		width: 100%;
-    margin-bottom: 110rpx;
 	}
   .ui-note__line{
     width: 100%;

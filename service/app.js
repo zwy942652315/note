@@ -41,7 +41,7 @@ router.post('/note/delete_note', noteController.deletenote)
 
 // 笔记本
 router.post('/note/add_note_book', noteBookController.createnotebook)
-router.post('/note/get_all_notebook', noteBookController.getallnotebook)
+router.get('/note/get_all_notebook', noteBookController.getallnotebook)
 router.get('/note/get_note_book', noteBookController.getnotebook)
 router.post('/note/edit_note_book', noteBookController.editnotebook)
 router.post('/note/delete_note_book', noteBookController.deletenotebook)
