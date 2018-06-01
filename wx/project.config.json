@@ -8,7 +8,7 @@
 		"newFeature": true
 	},
 	"compileType": "miniprogram",
-	"appid": "wxa2ad8db3f9bb939c",
+	"appid": "wx35959fdb98d9dbfc",
 	"projectname": "note-wechat-applets",
 	"miniprogramRoot": "./dist",
 	"condition": {}

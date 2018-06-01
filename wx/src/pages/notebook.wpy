@@ -145,6 +145,19 @@
     }
  
 
+    editNote (url,data) {
+      var self = this;
+      _g.ajax('post', url, data,function(res){
+        if (res.data.success) {
+          _g.toast(res.data.message);
+          self.getList(self.page);
+        }
+      },function(err){
+        console.log('err');
+        console.log(err);
+      });
+    }
+
     methods = {
       lower: function(e) {
         console.log('底部')
@@ -153,18 +166,6 @@
         if (!this.isBottom) {
           this.getList(this.page);
         }
-      },
-      editNote (url,data) {
-        var self = this;
-        _g.ajax('post', url, data,function(res){
-          if (res.data.success) {
-            _g.toast(res.data.message);
-            self.getList(self.page);
-          }
-        },function(err){
-          console.log('err');
-          console.log(err);
-        });
       },
       getNoteBookList (id) {
         this.$parent.globalData.notebook_id = id;

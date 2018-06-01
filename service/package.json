@@ -4,11 +4,13 @@
   "description": "搭建流程 npm install koa -s\r 参考文章：https://koa.bootcss.com/\r http://www.ruanyifeng.com/blog/2017/08/koa.html",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "pm2 start app.js --watch"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.18.0",
     "koa": "^2.5.1",
     "koa-body": "^2.5.0",
     "koa-route": "^3.2.0",

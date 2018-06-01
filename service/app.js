@@ -6,6 +6,7 @@ var router = new Router();
 
 const noteController = require('./controllers/noteController.js');
 const noteBookController = require('./controllers/noteBookController.js');
+const userController = require('./controllers/userController.js');
 
 var app = new Koa();
 app.use(koaBody());
@@ -45,6 +46,10 @@ router.get('/note/get_all_notebook', noteBookController.getallnotebook)
 router.get('/note/get_note_book', noteBookController.getnotebook)
 router.post('/note/edit_note_book', noteBookController.editnotebook)
 router.post('/note/delete_note_book', noteBookController.deletenotebook)
+
+//用户登录
+router.post('/user/login', userController.createUser)
+
 
 app
   .use(router.routes())

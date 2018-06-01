@@ -9,6 +9,11 @@
   }
 </style>
 <template>
+  <view class="{{authorized ? 'none' : 'block'}}">
+    <button wx:if="{{canIUse}}" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo">授权登录</button>
+    <view wx:if="{{!canIUse}}">请升级微信版本</view>
+  </view>
+
   <view class="container" wx:if="{{list && list.length > 0}}">
     <scroll-view scroll-y style="height:{{height}}px" bindscrolltolower="lower" scroll-top="{{scrollTop}}">
       <refresh :scrollTop.sync="scrollTop">
@@ -46,6 +51,8 @@
     }
 
     data = {
+      authorized: false,
+      canIUse: wx.canIUse('button.open-type.getUserInfo'),
       height: '',
       scrollTop: 0,
       page: 1,
@@ -114,6 +121,10 @@
     }
 
     methods = {
+      bindGetUserInfo: function(e) {
+        console.log('99999999999999999999999')
+        console.log(e.detail.userInfo)
+      },
       lower: function(e) {
         console.log('底部')
         console.log(e)
@@ -182,6 +193,8 @@
     onLoad(option) {
       console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
       console.log(option)
+      console.log(this.$parent.globalData);
+      this.authorized = this.$parent.globalData.authorized;
       this.notebook_id = option && option.id ? option.id : '';
       this.getList(1);
       wx.getSystemInfo({

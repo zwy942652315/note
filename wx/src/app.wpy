@@ -43,6 +43,7 @@
 <script>
 import wepy from 'wepy'
 import 'wepy-async-function'
+import _g from './common/util'
 
 
 export default class extends wepy.app {
@@ -59,41 +60,14 @@ export default class extends wepy.app {
       navigationBarTitleText: 'WeChat',
       navigationBarTextStyle: 'black',
       enablePullDownRefresh: true
-    },
-    // tabBar: {
-    //   "selectedColor": "#32b36e",
-    //   "list": [{
-    //     "pagePath": "pages/note_list",
-    //     "text": "所有",
-    //     "iconPath": "/assets/images/note.png",
-    //     "selectedIconPath": "/assets/images/note_select.png",
-    //     "selectedColor": "#32b36e",
-    //     "pageTum": "redirect",
-    //     active: true
-    //   }, {
-    //     "pagePath": "pages/note_add",
-    //     "text": "新增",
-    //     "iconPath": "/assets/images/add.png",
-    //     "selectedIconPath": "/assets/images/add_select.png",
-    //     "selectedColor": "#32b36e",
-    //     "pageTum": "navigate",
-    //     active: false
-    //   }, {
-    //     "pagePath": "pages/note_add",
-    //     "text": "笔记本",
-    //     "iconPath": "/assets/images/doc.png",
-    //     "selectedIconPath": "/assets/images/doc_select.png",
-    //     "selectedColor": "#32b36e",
-    //     "pageTum": "redirect",
-    //     active: false
-    //   }]
-    // }
+    }
   }
 
   globalData = {
     userInfo: null,
     tabIndex: null,
-    notebook_id: null
+    notebook_id: null,
+    authorized: false
   }
 
   constructor () {
@@ -102,7 +76,38 @@ export default class extends wepy.app {
   }
 
   onLaunch() {
-    this.testAsync()
+    var self  = this;
+    self.testAsync();
+    wx.login({
+      success: function(res) {
+        console.log('登录成功！')
+        console.log(res);
+        var code = res.code;
+        if (code) {
+          self.getUserInfo((userInfo)=>{
+            console.log('await getUserInfo')
+            console.log(userInfo)
+
+            _g.ajax('post', '/user/login',{code: code},function(res){
+              console.log('dfdfdfdfd')
+              console.log(res)
+              if (res.data.success) {
+                _g.toast(res.data.message);
+                self.globalData.authorized = true;
+                wx.setStorageSync('session_key', res.data.object.session_key);
+                wx.setStorageSync('openid', res.data.object.openid);
+              } else {
+                self.globalData.authorized = true;
+              }
+            },function(err){
+              console.log('err');
+              console.log(err);
+              self.globalData.authorized = true;
+            });
+          });
+        }
+      }
+    });
   }
 
   sleep (s) {
@@ -119,16 +124,26 @@ export default class extends wepy.app {
   }
 
   getUserInfo(cb) {
-    const that = this
+    const self = this
     if (this.globalData.userInfo) {
       return this.globalData.userInfo
     }
-    wepy.getUserInfo({
-      success (res) {
-        that.globalData.userInfo = res.userInfo
-        cb && cb(res.userInfo)
+    wx.getSetting({
+      success: function(res){
+        console.log('授权信息：')
+        console.log(res)
+        if (res.authSetting['scope.userInfo']) {
+          wx.getUserInfo({
+            success: function(res) {
+              console.log('用户信息-------：')
+              console.log(res)
+              self.globalData.userInfo = res.userInfo
+              cb && cb(res.userInfo)
+            }
+          });
+        }
       }
-    })
+    });
   }
 
 }

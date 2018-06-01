@@ -65,8 +65,8 @@ async function getallnote (ctx) {
         .find({ notebook_id: notebook_id }, function (err, res) {
             console.log(err);
           if (err) return handleError(err);
-            console.log('笔记列表');
-            console.log(res) // Space Ghost is a talk show host.
+            // console.log('笔记列表');
+            // console.log(res) // Space Ghost is a talk show host.
         })
         .limit(pageSize)
         .skip(skip)
@@ -77,8 +77,8 @@ async function getallnote (ctx) {
         .find({}, function (err, res) {
             console.log(err);
           if (err) return handleError(err);
-            console.log('笔记列表');
-            console.log(res) // Space Ghost is a talk show host.
+            // console.log('笔记列表');
+            // console.log(res) // Space Ghost is a talk show host.
         })
         .limit(pageSize)
         .skip(skip)
