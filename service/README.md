@@ -1,8 +1,8 @@
 # note
 # 搭建流程 
 	npm install koa -s
-	
-	[参考文章](https://koa.bootcss.com/)
+
+[参考文章](https://koa.bootcss.com/)
 
 # 环境搭建：
 	- 安装koa:
