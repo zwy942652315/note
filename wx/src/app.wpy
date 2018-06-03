@@ -87,7 +87,7 @@ export default class extends wepy.app {
           self.getUserInfo((userInfo)=>{
             console.log('await getUserInfo')
             console.log(userInfo)
-
+            // 获取openid和session_key
             _g.ajax('post', '/user/login',{code: code},function(res){
               console.log('dfdfdfdfd')
               console.log(res)
