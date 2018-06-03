@@ -1,6 +1,7 @@
 const axios = require('axios');
 const User = require('../models/user.js');
 const config = require('../config/config')
+const util = require('../config/util')
 
 async function getSessionKey (code, appid, appSecret) {
     var opt = {
@@ -15,7 +16,7 @@ async function getSessionKey (code, appid, appSecret) {
     };
     return axios.get('https://api.weixin.qq.com/sns/jscode2session?appid=' + appid + '&secret=' + appSecret + '&js_code=' + code + '&grant_type=authorization_code')
     .then(function (response) {
-        console.log(response);
+        console.log(response.data);
         var data = response.data;
         if (!data.openid || !data.session_key || data.errcode) {
             return {
@@ -23,6 +24,9 @@ async function getSessionKey (code, appid, appSecret) {
                 errmsg: data.errmsg || '返回数据字段不完整'
             }
         } else {
+            // 选择加密算法生成自己的登录态标识
+            const { session_key } = data;
+            const skey = util.getKey(session_key);
             return data
         }
     })

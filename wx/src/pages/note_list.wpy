@@ -7,11 +7,22 @@
       height: 100rpx;
     }
   }
+  .ui-modal__btn{
+    background: #32b36e;
+    color: #fff;
+  }
 </style>
 <template>
-  <view class="{{authorized ? 'none' : 'block'}}">
-    <button wx:if="{{canIUse}}" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo">授权登录</button>
-    <view wx:if="{{!canIUse}}">请升级微信版本</view>
+
+  <view class="{{authorized? 'isHide' : 'isShow'}} ui-modal__box">
+    <view class="ui-modal__content">
+      <view class="ui-modal__title"><text>微信授权</text></view>
+      <view class="ui-modal__bottom">
+        <button class="ui-modal__btn" wx:if="{{canIUse}}" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo">确定</button>
+        <view wx:if="{{!canIUse}}">请升级微信版本</view>
+      </view>
+    </view>
+    <view class="ui-modal__mask" bindtap="onModalCancel"></view>
   </view>
 
   <view class="container" wx:if="{{list && list.length > 0}}">
@@ -35,6 +46,7 @@
   import wepy from 'wepy'
   import notelist from '@/components/notelist'
   import tabBar from '@/components/tabBar'
+  import modal from '@/components/modal'
   import utils from '../common/util'
   import _g from '../common/util'
   import Refresh from 'wepy-scroll-view-refresh'
@@ -47,10 +59,12 @@
     components = {
       notelist: notelist,
       tabBar: tabBar,
-      refresh: Refresh
+      refresh: Refresh,
+      modal: modal
     }
 
     data = {
+      modalHidden: false,
       authorized: false,
       canIUse: wx.canIUse('button.open-type.getUserInfo'),
       height: '',
@@ -121,9 +135,21 @@
     }
 
     methods = {
+      onModalCancel: function(e) {
+        this.authorized = false;
+        this.$parent.globalData.authorized = false;
+      },
       bindGetUserInfo: function(e) {
-        console.log('99999999999999999999999')
-        console.log(e.detail.userInfo)
+        if (e.detail.userInfo) {
+          this.authorized = true;
+          this.$parent.globalData.authorized = true;
+          this.$parent.globalData.userInfo = e.detail.userInfo;
+        } else {
+          this.authorized = false;
+          this.$parent.globalData.authorized = false;
+          this.$parent.globalData.userInfo = null;
+        }
+
       },
       lower: function(e) {
         console.log('底部')
@@ -191,9 +217,6 @@
     }
 
     onLoad(option) {
-      console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
-      console.log(option)
-      console.log(this.$parent.globalData);
       this.authorized = this.$parent.globalData.authorized;
       this.notebook_id = option && option.id ? option.id : '';
       this.getList(1);
