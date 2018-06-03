@@ -1,20 +1,20 @@
 #note
-#搭建流程 npm install koa -s
-[参考文章](https://koa.bootcss.com/)
-	(http://www.ruanyifeng.com/blog/2017/08/koa.html)
+#搭建流程 
+	npm install koa -s
+	[参考文章](https://koa.bootcss.com/)
 
 #环境搭建：
-	-安装koa:
+	安装koa:
 		cnpm install koa --save
-	-分别新建一下文件，最终项目结构是：
-		>service————
-			       >>|____controllers	-控制器     	主要操作数据库
-			       >>|____models		-数据模型	建立数据库集合模型
-			       >>|____routers		-路由		
-			       >>|____app.js      -入口文件
-			       >>|____package.json
+	分别新建一下文件，最终项目结构是：
+		service————
+					|____controllers	-控制器     	主要操作数据库
+					|____models		-数据模型	建立数据库集合模型
+					|____routers		-路由		
+			       	|____app.js      -入口文件
+			       	|____package.json
 
-	-安装数据库模块：cnpm install mongoose
+	安装数据库模块：cnpm install mongoose
 
 
 
