@@ -8,6 +8,7 @@ var notebookListSchema = new Schema({
 		type: String,
 		default: ''
 	},
+	user_id: { type: Schema.Types.ObjectId, ref: 'user'} 
 },
 	{timestamps: {createdAt: 'createtime', updatedAt: 'modifytime'}}
 )

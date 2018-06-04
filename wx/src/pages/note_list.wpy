@@ -11,6 +11,12 @@
     background: #32b36e;
     color: #fff;
   }
+  .ui-modal__content{
+    z-index: 99999999999;
+  }
+  .ui-modal__mask{
+    z-index: 9999;
+  }
 </style>
 <template>
 
@@ -22,7 +28,7 @@
         <view wx:if="{{!canIUse}}">请升级微信版本</view>
       </view>
     </view>
-    <view class="ui-modal__mask" bindtap="onModalCancel"></view>
+    <view class="ui-modal__mask" catchtap="onModalCancel"></view>
   </view>
 
   <view class="container" wx:if="{{list && list.length > 0}}">

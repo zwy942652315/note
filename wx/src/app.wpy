@@ -130,6 +130,7 @@ export default class extends wepy.app {
   onLaunch() {
     var self  = this;
     var loginFlag = wx.getStorageSync('session_key');
+    console.log('登录9999999999999999999999',loginFlag)
     if (loginFlag) {
         // 检查 session_key 是否过期
         wx.checkSession({
@@ -172,12 +173,10 @@ export default class extends wepy.app {
         var code = res.code;
         if (code) {
           self.getUserInfo((userInfo)=>{
-            console.log('await getUserInfo')
-            console.log(userInfo)
+            const codeObject = {code: code};
+            Object.assign(userInfo, codeObject)
             // 获取openid和session_key
-            _g.ajax('post', '/user/login',{code: code},function(res){
-              console.log('dfdfdfdfd')
-              console.log(res)
+            _g.ajax('post', '/user/login',userInfo,function(res){
               if (res.data.success) {
                 _g.toast(res.data.message);
                 self.globalData.authorized = true;

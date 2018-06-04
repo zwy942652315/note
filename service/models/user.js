@@ -1,11 +1,35 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var userSchema = new Schema({
-	username: {
+	nickName: {
 		type: String,
 		default: ''
 	},
-	avatar: {
+	gender: {
+		type: String,
+		default: ''
+	},
+	city: {
+		type: String,
+		default: ''
+	},
+	province: {
+		type: String,
+		default: ''
+	},
+	country: {
+		type: String,
+		default: ''
+	},
+	avatarUrl: {
+		type: String,
+		default: ''
+	},
+	language: {
+		type: String,
+		default: ''
+	},
+	openid: {
 		type: String,
 		default: ''
 	}

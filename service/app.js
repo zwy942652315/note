@@ -2,6 +2,7 @@ var Koa = require('koa');
 var koaBody = require('koa-body');
 var mongoose = require('mongoose');
 var Router = require('koa-router');
+const config = require('./config/config')
 var router = new Router();
 
 const noteController = require('./controllers/noteController.js');
@@ -15,8 +16,8 @@ var router = require('./routers/note')
 
 //连接数据库：
 var options = {
-  user: '',
-  pass: ''
+  user: config.user,
+  pass: config.pass
 }
 mongoose.connect('mongodb://localhost:27017/note', options);
 

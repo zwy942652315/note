@@ -11,7 +11,7 @@ async function createnotebook(ctx) {
         ctx.body = {
             success: false,
             object: null,
-            message: '标题不能为空'
+            message: '笔记本名称不能为空'
         };
         return;
     }
