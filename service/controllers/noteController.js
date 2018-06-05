@@ -5,6 +5,7 @@ async function createnote(ctx) {
     const title = ctx.request.body.title;
     const content = ctx.request.body.content;
     const notebook_id = ctx.request.body.notebook_id  !== 'null' ? ctx.request.body.notebook_id : null;
+    const user_id = ctx.request.body.user_id;
     if (title === '' && content === '') {
         // ctx.throw(400, '内容不能为空');
         ctx.status = 400;
@@ -38,7 +39,8 @@ async function createnote(ctx) {
     const noteList = new Note({
         title,
         content,
-        notebook_id
+        notebook_id,
+        user_id
     });
     let createResult = await noteList.save().catch(err => {
         console.log(err);
@@ -60,9 +62,10 @@ async function getallnote (ctx) {
     const page = Number(ctx.query.page);
     const pageSize = Number(ctx.query.pageSize);
     const skip = (page - 1) * pageSize;
+    const user_id = ctx.query.user_id;
     if (notebook_id) {
         var res = await Note
-        .find({ notebook_id: notebook_id }, function (err, res) {
+        .find({ notebook_id: notebook_id, user_id: user_id }, function (err, res) {
             console.log(err);
           if (err) return handleError(err);
             // console.log('笔记列表');
@@ -74,7 +77,7 @@ async function getallnote (ctx) {
         .sort({ createtime: -1 })
     } else {
         var res = await Note
-        .find({}, function (err, res) {
+        .find({user_id: user_id}, function (err, res) {
             console.log(err);
           if (err) return handleError(err);
             // console.log('笔记列表');

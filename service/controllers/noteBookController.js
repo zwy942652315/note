@@ -4,6 +4,7 @@ const Note = require('../models/note.js');
 // 新增一个笔记本
 async function createnotebook(ctx) {
     const bookname = ctx.request.body.bookname;
+    const user_id = ctx.request.body.user_id;
 
     if (bookname === '') {
         // ctx.throw(400, '标题不能为空');
@@ -30,7 +31,8 @@ async function createnotebook(ctx) {
     }
 
     const notebookList = new Notebook({
-        bookname
+        bookname,
+        user_id
     });
     let createResult = await notebookList.save().catch(err => {
         ctx.throw(500, '服务器内部错误');
@@ -50,8 +52,9 @@ async function getallnotebook (ctx) {
     const page = Number(ctx.query.page);
     const pageSize = Number(ctx.query.pageSize);
     const skip = (page - 1) * pageSize;
+    const user_id = ctx.query.user_id;
     var res = await Notebook
-    .find({}, function (err, res) {
+    .find({user_id: user_id}, function (err, res) {
       if (err) return handleError(err);
         // console.log('笔记本列表');
         // console.log(res) // Space Ghost is a talk show host.

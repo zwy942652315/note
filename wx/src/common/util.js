@@ -1,17 +1,16 @@
 const ajax = (type,url,data,success,error) => {
 	// var host = 'http://120.79.44.8:88';
-	var host = 'http://127.0.0.1:3000'
+	var host = 'http://127.0.0.1:3000';
+	data.user_id = wx.getStorageSync('user_id') ? wx.getStorageSync('user_id') : '';
 	wx.request({
 		method: type,
 	    url: host + url,
 		data: data,
         header: {
             'content-type': 'application/x-www-form-urlencoded', // 默认值
-            'zt_token': wx.getStorageSync('token')
+            'zt_token': wx.getStorageSync('session_key')
         },
 	    success: function (res) {
-	    	console.log('res------------------------------------------')
-	    	console.log(res)
 	    	if (res.statusCode == 200) {
 	      		success && success(res);
 	    	} else {

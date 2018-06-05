@@ -27,7 +27,6 @@ async function getSessionKey (code, appid, appSecret) {
             // 选择加密算法生成自己的登录态标识
             const { session_key } = data;
             const skey = util.getKey(session_key);
-            delete data.openid;
             return data
         }
     })
@@ -44,11 +43,9 @@ async function createUser(ctx) {
     delete userInfo.code;
     const result = await getSessionKey(code, config.appid, config.appSecret);
 
-    ctx.body = {
-        success: true,
-        object: result,
-        message: '登录成功'
-    };
+    console.log('ctx------------------cookie')
+    console.log(ctx);
+    console.log('ctx**********************cookie')
 
     // 判断用户是否重复
     Object.assign(userInfo, result);
@@ -56,17 +53,21 @@ async function createUser(ctx) {
     .findOne({'openid': userInfo.openid}, function (err, res) {
       if (err) return handleError(err);
     })
-    if (res !== null) {
-        return;
+    let createNewUser = null;
+    if (!res) {
+        const userList = new User(userInfo);
+        // 创建新用户
+        createNewUser = await userList.save().catch(err => {
+            console.log(err);
+            ctx.throw(500, '服务器内部错误');
+        });
     }
 
-    const userList = new User(userInfo);
-    // 创建新用户
-    let createNewUser = await userList.save().catch(err => {
-        console.log(err);
-        ctx.throw(500, '服务器内部错误');
-    });
-
+    ctx.body = {
+        success: true,
+        object: createNewUser,
+        message: '登录成功'
+    };
 }
 
 

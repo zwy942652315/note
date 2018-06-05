@@ -2,8 +2,10 @@ var Koa = require('koa');
 var koaBody = require('koa-body');
 var mongoose = require('mongoose');
 var Router = require('koa-router');
-const config = require('./config/config')
+const config = require('./config/config');
 var router = new Router();
+var cookie = require('koa-cookie');
+var onerror = require('koa-onerror');
 
 const noteController = require('./controllers/noteController.js');
 const noteBookController = require('./controllers/noteBookController.js');
@@ -11,8 +13,9 @@ const userController = require('./controllers/userController.js');
 
 var app = new Koa();
 app.use(koaBody());
+onerror(app);	// koa-onerror 中间件，优化错误信息，根据这些错误信息就能更好的捕获到错误
 
-var router = require('./routers/note')
+// router.use(cookie());
 
 //连接数据库：
 var options = {
@@ -33,6 +36,8 @@ mongoose.connection.on('disconnected', function () {
     console.log('数据库连接断开');  
 })
 
+//用户登录
+router.post('/user/login', userController.createUser)
 
 // 笔记
 router.post('/note/add_note', noteController.createnote)
@@ -47,10 +52,6 @@ router.get('/note/get_all_notebook', noteBookController.getallnotebook)
 router.get('/note/get_note_book', noteBookController.getnotebook)
 router.post('/note/edit_note_book', noteBookController.editnotebook)
 router.post('/note/delete_note_book', noteBookController.deletenotebook)
-
-//用户登录
-router.post('/user/login', userController.createUser)
-
 
 app
   .use(router.routes())

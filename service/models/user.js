@@ -32,6 +32,10 @@ var userSchema = new Schema({
 	openid: {
 		type: String,
 		default: ''
+	},
+	session_key: {
+		type: String,
+		default: ''
 	}
 },
 	{timestamps: {createdAt: 'createtime', updatedAt: 'modifytime'}}

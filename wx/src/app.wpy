@@ -180,8 +180,11 @@ export default class extends wepy.app {
               if (res.data.success) {
                 _g.toast(res.data.message);
                 self.globalData.authorized = true;
-                wx.setStorageSync('session_key', res.data.object.session_key);
-                wx.setStorageSync('openid', res.data.object.openid);
+                if (res.data.object) {
+                  wx.setStorageSync('session_key', res.data.object.session_key);
+                  wx.setStorageSync('openid', res.data.object.openid);
+                  wx.setStorageSync('user_id', res.data.object._id);
+                }
               } else {
                 self.globalData.authorized = true;
               }
