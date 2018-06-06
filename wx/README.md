@@ -3,31 +3,31 @@
 
 # 搭建流程：
 -全局安装或更新WePY命令行工具
-npm install wepy-cli -g
+	npm install wepy-cli -g
 
 -初始化项目
-wepy init standard myproject
+	wepy init standard myproject
 
 -切换至项目目录
-cd wx
+	cd wx
 
 -安装依赖
-npm  install
+	npm  install
 
 -开启实时编译
-wepy build --watch
+	wepy build --watch
 
-├── dist                   -小程序运行代码目录（该目录由WePY的build指令自动编译生成，请不要直接修改该目录下的文件）
-├── node_modules           
-├── src                    -代码编写的目录（该目录为使用WePY后的开发目录）
-├     ├── components         -WePY组件目录（组件不属于完整页面，仅供完整页面或其他组件引用）
-├     ├     ├── com_a.wpy      -可复用的WePY组件a
-├     ├     ├── com_b.wpy      -可复用的WePY组件b
-├     ├── pages              -WePY页面目录（属于完整页面）
-├     ├     ├── index.wpy      index页面（经build后，会在dist目录下的pages目录生成index.js、index.json、index.wxml和index.wxss文件）
-├     ├     ├── other.wpy      other页面（经build后，会在dist目录下的pages目录生成other.js、other.json、other.wxml和other.wxss文件）
-├     ├── app.wpy            小程序配置项（全局数据、样式、声明钩子等；经build后，会在dist目录下生成app.js、app.json和app.wxss文件）
-├── package.json           -项目的package配置
+	├── dist                   -小程序运行代码目录（该目录由WePY的build指令自动编译生成，请不要直接修改该目录下的文件）
+	├── node_modules           
+	├── src                    -代码编写的目录（该目录为使用WePY后的开发目录）
+	├     ├── components         -WePY组件目录（组件不属于完整页面，仅供完整页面或其他组件引用）
+	├     ├     ├── com_a.wpy      -可复用的WePY组件a
+	├     ├     ├── com_b.wpy      -可复用的WePY组件b
+	├     ├── pages              -WePY页面目录（属于完整页面）
+	├     ├     ├── index.wpy      index页面（经build后，会在dist目录下的pages目录生成index.js、index.json、index.wxml和index.wxss文件）
+	├     ├     ├── other.wpy      other页面（经build后，会在dist目录下的pages目录生成other.js、other.json、other.wxml和other.wxss文件）
+	├     ├── app.wpy            小程序配置项（全局数据、样式、声明钩子等；经build后，会在dist目录下生成app.js、app.json和app.wxss文件）
+	├── package.json           -项目的package配置
 
 
 # 注意：
@@ -41,7 +41,8 @@ wepy build --watch
 	- [详细介绍](https://developers.weixin.qq.com/miniprogram/dev/api/api-login.html#wxloginobject)
 2. 获取openid和session_key
 	- openid，在公众平台里，用来标识每个用户在订阅号、服务号、小程序这三种不同应用的唯一标识，也就是说每个用户在每个应用的openid都是不一致的，所以在小程序里，我们可以用openid来标识用户的唯一性。
-	- session_key是用来干嘛的呢？有了用户标识，我们就需要让该用户进行登录，那么session_key就保证了当前用户进行会话操作的有效性，这个session_key是微信服务端给我们派发的。也就是说，我们可以用这个标识来间接地维护我们小程序用户的登录态，那么这个session_key是怎么拿到的呢？我们需要在自己的服务端请求[微信提供的第三方接口](https://api.weixin.qq.com/sns/jscode2session)，这个接口需要带上四个参数字段：
+	- session_key是用来干嘛的呢？有了用户标识，我们就需要让该用户进行登录，那么session_key就保证了当前用户进行会话操作的有效性，这个session_key是微信服务端给我们派发的。也就是说，我们可以用这个标识来间接地维护我们小程序用户的登录态，那么这个session_key是怎么拿到的呢？我们需要在自己的服务端请求[微信提供的第三方接口](https://api.weixin.qq.com/sns/jscode2session) 
+	接口地址：https://api.weixin.qq.com/sns/jscode2session?appid=APPID&secret=SECRET&js_code=JSCODE&grant_type=authorization_code，这个接口需要带上四个参数字段：
 	- 
 	|参数|必填|说明|
 	|------|------|------|
