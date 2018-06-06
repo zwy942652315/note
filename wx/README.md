@@ -2,19 +2,19 @@
 
 
 # 搭建流程：
--全局安装或更新WePY命令行工具
+-	全局安装或更新WePY命令行工具
 	npm install wepy-cli -g
 
--初始化项目
+-	初始化项目
 	wepy init standard myproject
 
--切换至项目目录
+-	切换至项目目录
 	cd wx
 
--安装依赖
+-	安装依赖
 	npm  install
 
--开启实时编译
+-	开启实时编译
 	wepy build --watch
 
 	├── dist                   -小程序运行代码目录（该目录由WePY的build指令自动编译生成，请不要直接修改该目录下的文件）
