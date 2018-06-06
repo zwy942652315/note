@@ -44,7 +44,7 @@ async function createUser(ctx) {
     const result = await getSessionKey(code, config.appid, config.appSecret);
 
     console.log('ctx------------------cookie')
-    console.log(ctx);
+    console.log(ctx.cookie);
     console.log('ctx**********************cookie')
 
     // 判断用户是否重复
@@ -53,13 +53,21 @@ async function createUser(ctx) {
     .findOne({'openid': userInfo.openid}, function (err, res) {
       if (err) return handleError(err);
     })
-    let createNewUser = null;
+    let createNewUser = res;
     if (!res) {
         const userList = new User(userInfo);
         // 创建新用户
         createNewUser = await userList.save().catch(err => {
             console.log(err);
             ctx.throw(500, '服务器内部错误');
+        });
+    } else {
+        const updateData = {$set: userInfo};
+        // 更新用户信息
+        await User.update({openid: userInfo.openid}, updateData, function (err, docs) {
+          if (err) return handleError(err);
+          console.log('docs 就是mongodb返回的更改状态的falg ', docs);
+          //比如: { ok: 1, nModified: 2, n: 2 }
         });
     }
 

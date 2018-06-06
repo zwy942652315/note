@@ -71,7 +71,7 @@
 
     data = {
       modalHidden: false,
-      authorized: false,
+      authorized: true,
       canIUse: wx.canIUse('button.open-type.getUserInfo'),
       height: '',
       scrollTop: 0,
@@ -146,10 +146,14 @@
         this.$parent.globalData.authorized = false;
       },
       bindGetUserInfo: function(e) {
+        var self = this;
         if (e.detail.userInfo) {
           this.authorized = true;
           this.$parent.globalData.authorized = true;
           this.$parent.globalData.userInfo = e.detail.userInfo;
+          _g.doLogin(this.$parent, () => {
+            self.getList(1)
+          })
         } else {
           this.authorized = false;
           this.$parent.globalData.authorized = false;
@@ -220,12 +224,21 @@
 
     onShow () {
       var self = this;
+      console.log('show')
+      _g.isLogin(this.$parent, ()=>{
+        self.getList(1);
+      }, (res)=> {
+        self.getList(1);
+
+      }, (err)=>{
+        self.authorized = this.$parent.globalData.authorized;
+        self.$apply();
+      });
     }
 
     onLoad(option) {
-      this.authorized = this.$parent.globalData.authorized;
+      console.log('load')
       this.notebook_id = option && option.id ? option.id : '';
-      this.getList(1);
       wx.getSystemInfo({
         success: (res) => {
           this.height = res.windowHeight - 61;
