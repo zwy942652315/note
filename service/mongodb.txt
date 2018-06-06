@@ -1,0 +1,69 @@
+显示数据库操作命令
+>db.help();
+
+查看所有数据库：
+>show dbs;
+
+创建数据库
+>use 数据库名称
+
+删除数据库
+>db.dropDatabase();
+
+切换数据库
+>use 数据库名称;
+
+查看数据库中的所有集合
+>show collections;
+
+查看当前数据库的用户信息
+>show users;
+
+查看当前所在数据库
+>db;或者 db.getName();
+
+显示集合操作命令，同样有很多的命令，foo指的是当前数据库下，一个叫foo的集合，并非真正意义上的命令
+>db.foo.help();
+
+对于当前数据库中的foo集合进行数据查找（由于没有条件，会列出所有数据） 
+>db.foo.find();           
+>db.foo.find().pretty();	格式化     
+
+对于当前数据库中的foo集合进行查找，条件是数据中有一个属性叫a，且a的值为1   
+>db.foo.find( { a : 1 } );
+
+添加并验证用户
+>use admin
+>db.createUser({user:"xiaoming",pwd:"123456",roles:[{role:"userAdmin",db:"test"}]})	添加用户
+> db.auth("admin","123456")  验证用户密码是否正确
+
+删除用户
+>db.dropUser("xiaoming");
+
+显示当前db状态
+>db.stats();
+
+显示当前db的版本
+>db.version();
+
+查看当前db的链接机器地址
+>db.getMongo();
+
+导入数据库
+>mongoimport -d 数据库名称 -c 集合名称 --file 导入文件的地址
+
+开启远程访问
+
+编辑配置文件：vi /etc/mongod.conf
+bindIp: 172.16.40.205      #数据库所在服务器IP地址
+保存重启数据库！
+本地登录：mongo 172.16.40.205/admin -u admin -p 123456
+远程登录：
+1. 下载mongodb压缩包
+mongodb-linux-x86_64-3.4.10.tgz
+2. 解压
+> tar zxvf mongodb-linux-x86_64-3.4.10.tgz
+3. 进入bin目录
+> cd mongodb-linux-x86_64-3.4.10/bin
+4. 连接远程数据库
+> ./mongo 172.16.40.205:27017/admin  -u user  -p  password
