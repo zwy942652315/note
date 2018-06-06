@@ -17,6 +17,8 @@
 -	开启实时编译
 	wepy build --watch
 
+```
+
 	├── dist                   -小程序运行代码目录（该目录由WePY的build指令自动编译生成，请不要直接修改该目录下的文件）
 	├── node_modules           
 	├── src                    -代码编写的目录（该目录为使用WePY后的开发目录）
@@ -28,6 +30,7 @@
 	├     ├     ├── other.wpy      other页面（经build后，会在dist目录下的pages目录生成other.js、other.json、other.wxml和other.wxss文件）
 	├     ├── app.wpy            小程序配置项（全局数据、样式、声明钩子等；经build后，会在dist目录下生成app.js、app.json和app.wxss文件）
 	├── package.json           -项目的package配置
+```
 
 
 # 注意：
