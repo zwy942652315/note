@@ -44,7 +44,7 @@ async function createUser(ctx) {
     const result = await getSessionKey(code, config.appid, config.appSecret);
 
     console.log('ctx------------------cookie')
-    console.log(ctx.cookie);
+    console.log(ctx);
     console.log('ctx**********************cookie')
 
     // 判断用户是否重复

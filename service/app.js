@@ -4,7 +4,6 @@ var mongoose = require('mongoose');
 var Router = require('koa-router');
 const config = require('./config/config');
 var router = new Router();
-var cookie = require('koa-cookie');
 var onerror = require('koa-onerror');
 
 const noteController = require('./controllers/noteController.js');
@@ -15,7 +14,6 @@ var app = new Koa();
 app.use(koaBody());
 onerror(app);	// koa-onerror 中间件，优化错误信息，根据这些错误信息就能更好的捕获到错误
 
-// router.use(cookie());
 
 //连接数据库：
 var options = {

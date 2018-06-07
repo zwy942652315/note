@@ -1,7 +1,7 @@
 
 const ajax = (type,url,data,success,error) => {
-	// var host = 'http://120.79.44.8:88';
-	var host = 'http://127.0.0.1:3000';
+	var host = 'http://120.79.44.8:88';
+	// var host = 'http://127.0.0.1:3000';
 	data.user_id = wx.getStorageSync('user_id') ? wx.getStorageSync('user_id') : '';
 	wx.request({
 		method: type,

@@ -46,7 +46,7 @@
 
 # nginx配置：
 
-	```
+```
 	server {
 	    listen 80;
 	    server_name note.com www.note.com; # 改成你自己的域名
@@ -77,4 +77,4 @@
 	        expires      max;
 	    }
 	}
-	```
+```

@@ -11,5 +11,10 @@
 	"appid": "wx35959fdb98d9dbfc",
 	"projectname": "note-wechat-applets",
 	"miniprogramRoot": "./dist",
+	"scripts": {
+		"beforeCompile": "",
+		"beforePreview": "",
+		"beforeUpload": ""
+	},
 	"condition": {}
 }
