@@ -14,10 +14,11 @@
 
 # 后台：node + koa + mongole
 ## 快速开始：
-	进入到  service，执行：cnpm install
-	安装数据库mongodb，官网 ： https://www.mongodb.com/download-center
-	启动数据库mongodb： 进入MongoDB\bin目录，执行：mongod --dbpath D:\mongodb\data\db
-	开启： node app.js
+- 进入到  service，执行：cnpm install
+- 安装数据库mongodb，[官网](https://www.mongodb.com/download-center)
+- [本地mongodb配置](http://www.imooc.com/article/18438)
+- 启动数据库mongodb： 进入MongoDB\bin目录，执行：mongod --dbpath D:\mongodb\data\db 或者 mongod --config D:\mongodb\etc\mongo.conf --auth
+- 开启： node app.js
 
 
 # 注意：

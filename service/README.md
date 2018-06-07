@@ -15,10 +15,12 @@
 		       |____app.js      -入口文件
 		       |____package.json
 
-- 安装数据库模块：cnpm install mongoose
+- 安装数据库模块
+-- cnpm install mongoose
 
 
-
+- 创建数据库用户账号
+-- db.createUser({user:"admin",pwd:"123456",roles:["root"]})
 
 
 
