@@ -4,6 +4,7 @@ const Note = require('../models/note.js');
 async function createnote(ctx) {
     const title = ctx.request.body.title;
     const content = ctx.request.body.content;
+    const isCollect = false;    // 默认不收藏
     const notebook_id = ctx.request.body.notebook_id  !== 'null' ? ctx.request.body.notebook_id : null;
     const user_id = ctx.request.body.user_id;
     if (title === '' && content === '') {
@@ -39,6 +40,7 @@ async function createnote(ctx) {
     const noteList = new Note({
         title,
         content,
+        isCollect,
         notebook_id,
         user_id
     });
@@ -63,31 +65,27 @@ async function getallnote (ctx) {
     const pageSize = Number(ctx.query.pageSize);
     const skip = (page - 1) * pageSize;
     const user_id = ctx.query.user_id;
+    const isCollect = ctx.query.myCollect === 'true';
+    var filterData = null;
     if (notebook_id) {
-        var res = await Note
-        .find({ notebook_id: notebook_id, user_id: user_id }, function (err, res) {
-            console.log(err);
-          if (err) return handleError(err);
-            // console.log('笔记列表');
-            // console.log(res) // Space Ghost is a talk show host.
-        })
-        .limit(pageSize)
-        .skip(skip)
-        .populate('notebook_id')
-        .sort({ createtime: -1 })
+        filterData = { notebook_id: notebook_id, user_id: user_id };
     } else {
-        var res = await Note
-        .find({user_id: user_id}, function (err, res) {
-            console.log(err);
-          if (err) return handleError(err);
-            // console.log('笔记列表');
-            // console.log(res) // Space Ghost is a talk show host.
-        })
-        .limit(pageSize)
-        .skip(skip)
-        .populate('notebook_id')
-        .sort({ createtime: -1 })
+        filterData = {user_id: user_id};
     }
+    if (isCollect) {
+        Object.assign(filterData, {isCollect: isCollect});
+    }
+    var res = await Note
+    .find(filterData, function (err, res) {
+        console.log(err);
+      if (err) return handleError(err);
+        // console.log('笔记列表');
+        // console.log(res) // Space Ghost is a talk show host.
+    })
+    .limit(pageSize)
+    .skip(skip)
+    .populate('notebook_id')
+    .sort({ createtime: -1 })
     ctx.body = {
         success: true,
         object: res,
@@ -143,10 +141,45 @@ async function deletenote (ctx) {
     };
 }
 
+// 收藏某一条笔记
+async function collectnote (ctx) {
+    const noteId = ctx.request.body.noteId;
+    const isCollect = ctx.request.body.isCollect;
+    const updateData = {$set:{isCollect: isCollect}};
+    await Note.update({_id: noteId}, updateData, function (err, docs) {
+      if (err) return handleError(err);
+      console.log('docs 就是mongodb返回的更改状态的falg ', docs);
+      //比如: { ok: 1, nModified: 2, n: 2 }
+    });
+    ctx.body = {
+        success: true,
+        object: null,
+        message: isCollect === 'true' ? '收藏成功' : '取消收藏'
+    };
+}
+
+// 移动某一条笔记
+async function movenote (ctx) {
+    const noteId = ctx.request.body.noteId;
+    const notebook_id = ctx.request.body.notebook_id;
+    await Note.update({_id: noteId}, {notebook_id: notebook_id}, function (err, docs) {
+      if (err) return handleError(err);
+      console.log('docs 就是mongodb返回的更改状态的falg ', docs);
+      //比如: { ok: 1, nModified: 2, n: 2 }
+    });
+    ctx.body = {
+        success: true,
+        object: null,
+        message: '移动成功'
+    };
+}
+
 module.exports = noteController = {
     createnote: createnote,
     getallnote: getallnote,
     getnote: getnote,
     editnote: editnote,
-    deletenote: deletenote
+    deletenote: deletenote,
+    collectnote: collectnote,
+    movenote: movenote
 };

@@ -1,0 +1,35 @@
+<style type="less">
+  .isShow{
+    visibility: visible;
+  }
+  .isHide{
+    visibility: hidden;
+  }
+</style>
+<template>
+  <view class="{{modalHidden? 'isHide' : 'isShow'}} ui-modal__box">
+    <view class="ui-modal__content">
+      <slot></slot>
+    </view>
+    <view class="ui-modal__mask" bindtap="onModalCancel"></view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+
+  export default class Modal extends wepy.component {
+    props = {
+      modalHidden: {
+        type: Boolean,
+        default: true
+      }
+    }
+
+    methods = {
+      onModalCancel (e) {
+        console.log(e)
+        this.$emit('onModalCancel')
+      }
+    }
+  }
+</script>

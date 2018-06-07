@@ -12,6 +12,10 @@ var noteListSchema = new Schema({
 		type: String,
 		default: ''
 	},
+	isCollect: {
+		type: Boolean,
+		default: false
+	},
 	notebook_id: { type: Schema.Types.ObjectId, ref: 'notebook'},
 	user_id: { type: Schema.Types.ObjectId, ref: 'user'} 
 },

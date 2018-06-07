@@ -104,7 +104,10 @@ export default class extends wepy.app {
       'pages/note_list',
       'pages/note_add',
       'pages/notebook',
-      'pages/note_my'
+      'pages/note_move',
+      'pages/note_move_here',
+      'pages/note_my',
+      'pages/note_help'
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -119,7 +122,9 @@ export default class extends wepy.app {
     userInfo: null,
     tabIndex: null,
     notebook_id: null,
-    authorized: true
+    authorized: true,
+    isMoveNote: false,
+    moveNoteId: '',
   }
 
   constructor () {

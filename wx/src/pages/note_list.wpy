@@ -17,6 +17,19 @@
   .ui-modal__mask{
     z-index: 9999;
   }
+  .ui-modal__item{
+    width: 100%;
+    height: 100rpx;
+    line-height: 100rpx;
+    border-bottom: 1rpx solid #ccc;
+    image{
+      width: 50rpx;
+      height: 50rpx;
+      display: inline-block;
+      vertical-align: middle;
+      margin: 0 10rpx;
+    }
+  }
 </style>
 <template>
 
@@ -35,7 +48,7 @@
     <scroll-view scroll-y style="height:{{height}}px" bindscrolltolower="lower" scroll-top="{{scrollTop}}">
       <refresh :scrollTop.sync="scrollTop">
         <view slot="refresh-content" style="margin-top:45px;">
-          <notelist :list.sync="list" @editNote.user="edit" @deleteNote.user="deleteNote"></notelist>
+          <notelist :list.sync="list" @editNote.user="edit" @deleteNote.user="deleteNote" @onTapCollect.user="onTapCollect" @longpressNote.user="longpressNote"></notelist>
           <view class="{{isBottom ? 'block' : 'none'}} ui-list__none">没有更多了</view>
         </view>
       </refresh>
@@ -46,6 +59,10 @@
     <view class="block"><image src="../assets/images/none.png"></image></view>
     <view class="block">暂无笔记，点击添加笔记</view>
   </view>
+
+  <noteModal :modalHidden.sync="modalHidden" @onModalCancel.user="onCancelMove">
+    <view class="ui-modal__item" @tap="onTapMoveNote"><image src="../assets/images/move.png"></image><text>移动</text></view>
+  </noteModal>
 </template>
 
 <script>
@@ -53,6 +70,7 @@
   import notelist from '@/components/notelist'
   import tabBar from '@/components/tabBar'
   import modal from '@/components/modal'
+  import noteModal from '@/components/noteModal'
   import utils from '../common/util'
   import _g from '../common/util'
   import Refresh from 'wepy-scroll-view-refresh'
@@ -66,11 +84,12 @@
       notelist: notelist,
       tabBar: tabBar,
       refresh: Refresh,
-      modal: modal
+      modal: modal,
+      noteModal: noteModal
     }
 
     data = {
-      modalHidden: false,
+      modalHidden: true,
       authorized: true,
       canIUse: wx.canIUse('button.open-type.getUserInfo'),
       height: '',
@@ -80,6 +99,8 @@
       isBottom: false,
       list: [],
       notebook_id: '',
+      myCollect: false,
+      moveNoteId: '',
       tabBar: {
         "selectedColor": "#32b36e",
         "list": [
@@ -141,6 +162,18 @@
     }
 
     methods = {
+      onShareAppMessage: function (res) {
+        if (res.from === 'button') {
+          // 来自页面内转发按钮
+          console.log(res.target)
+        }
+        return {
+          title: '个人笔记',
+          path: '/pages/note_list',
+          imageUrl: '/assets/images/sharenote.png'
+        }
+      },
+
       onModalCancel: function(e) {
         this.authorized = false;
         this.$parent.globalData.authorized = false;
@@ -174,6 +207,18 @@
           url: 'note_add?id=' + id
         })
       },
+      onTapCollect (id, isCollect) {
+        var self = this;
+        _g.ajax('post', '/note/collect_note',{noteId: id, isCollect: isCollect},function(res){
+          if (res.data.success) {
+            _g.toast(res.data.message);
+            self.getList(self.page);
+          }
+        },function(err){
+          console.log('err');
+          console.log(err);
+        });
+      },
       deleteNote (id) {
         var self = this;
         _g.ajax('post', '/note/delete_note',{noteId: id},function(res){
@@ -190,12 +235,26 @@
         wx.navigateTo({
           url: 'note_add'
         })
+      },
+      longpressNote (id) {
+        this.modalHidden = false;
+        this.moveNoteId = id;
+      },
+      onTapMoveNote () {
+        this.modalHidden = true;
+        this.$parent.globalData.moveNoteId = this.moveNoteId;
+        wx.navigateTo({
+          url: 'note_move'
+        });
+      },
+      onCancelMove () {
+        this.modalHidden = true;
       }
     }
 
     getList (page) {
       var self = this;
-      _g.ajax('get', '/note/get_all_note',{notebook_id: self.notebook_id, page: page, pageSize: self.pageSize} ,function(res){
+      _g.ajax('get', '/note/get_all_note',{notebook_id: self.notebook_id, page: page, pageSize: self.pageSize, myCollect: self.myCollect} ,function(res){
         if (res.data.object && res.data.object.length ===0) {
           self.isBottom = true;
         }
@@ -238,7 +297,13 @@
 
     onLoad(option) {
       console.log('load')
+      console.log(option)
       this.notebook_id = option && option.id ? option.id : '';
+      this.myCollect = option && option.myCollect ? option.myCollect : '';
+      var text  = this.myCollect ? '我的收藏' : '笔记列表';
+      wx.setNavigationBarTitle({
+        title: text
+      })
       wx.getSystemInfo({
         success: (res) => {
           this.height = res.windowHeight - 61;

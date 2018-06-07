@@ -43,6 +43,10 @@ router.get('/note/get_all_note', noteController.getallnote)
 router.get('/note/get_note', noteController.getnote)
 router.post('/note/edit_note', noteController.editnote)
 router.post('/note/delete_note', noteController.deletenote)
+	// 收藏笔记
+router.post('/note/collect_note', noteController.collectnote)
+	// 移动笔记
+router.post('/note/move_note', noteController.movenote)
 
 // 笔记本
 router.post('/note/add_note_book', noteBookController.createnotebook)

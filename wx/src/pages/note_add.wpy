@@ -134,6 +134,10 @@
     }
 
     onLoad (option) {
+      // 显示当前页面的转发按钮
+      wx.showShareMenu({
+        withShareTicket: true
+      })
       var self = this;
       if (option && option.id) {
         self.noteId = option.id;

@@ -34,6 +34,13 @@
       font-size: 30rpx;
       text-indent: 20rpx;
       border-bottom: 1rpx solid #ccc;
+      image{
+        width: 50rpx;
+        height: 50rpx;
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: 10rpx;
+      }
     }
   }
 </style>
@@ -45,7 +52,14 @@
     <view class="ui-my__name"><open-data type="userNickName"></open-data></view>
   </view>
   <view class="ui-my__list">
-    <view class="ui-my__item">我的收藏</view>
+    <view class="ui-my__item" @tap="onTapCollect">
+      <image src="../assets/images/hascollect.png"></image>
+      <text>我的收藏</text>
+    </view>
+    <view class="ui-my__item" @tap="onTapHelp">
+      <image src="../assets/images/help.png"></image>
+      <text>使用指南</text>
+    </view>
   </view>
   <tabBar :tabBar="tabBar"></tabBar>
 </template>
@@ -141,6 +155,17 @@
     }
 
     methods = {
+      onShareAppMessage: function (res) {
+        if (res.from === 'button') {
+          // 来自页面内转发按钮
+          console.log(res.target)
+        }
+        return {
+          title: '个人笔记',
+          path: '/pages/note_list',
+          imageUrl: '/assets/images/sharenote.png'
+        }
+      },
       lower: function(e) {
         console.log('底部')
         console.log(e)
@@ -169,6 +194,16 @@
       addNote () {
         wx.navigateTo({
           url: 'note_add'
+        })
+      },
+      onTapCollect () {
+        wx.navigateTo({
+          url: 'note_list?myCollect=true'
+        })
+      },
+      onTapHelp () {
+        wx.navigateTo({
+          url: 'note_help'
         })
       }
     }

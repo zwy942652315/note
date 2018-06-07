@@ -1,0 +1,141 @@
+<style lang="less">
+  .ui-note__nolist{
+    text-align: center;
+    margin: 100rpx auto;
+    image{
+      width: 100rpx;
+      height: 100rpx;
+    }
+  }
+  .ui-modal__btn{
+    background: #32b36e;
+    color: #fff;
+  }
+  .ui-modal__content{
+    z-index: 99999999999;
+  }
+  .ui-modal__mask{
+    z-index: 9999;
+  }
+  .ui-modal__item{
+    width: 100%;
+    height: 100rpx;
+    line-height: 100rpx;
+    border-bottom: 1rpx solid #ccc;
+    image{
+      width: 50rpx;
+      height: 50rpx;
+      display: inline-block;
+      vertical-align: middle;
+      margin: 0 10rpx;
+    }
+  }
+</style>
+<template>
+
+  <tabBar :tabBar="tabBar"></tabBar>
+
+  <noteModal :modalHidden.sync="modalHidden" @onModalCancel.user="onCancelMove">
+    <view class="ui-modal__item" @tap="onTapMoveHere"><image src="../assets/images/move.png"></image><text>移动到此处</text></view>
+  </noteModal>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import _g from '../common/util'
+  import tabBar from '@/components/tabBar'
+  import noteModal from '@/components/noteModal'
+
+
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '笔记列表'
+    }
+    components = {
+      tabBar: tabBar,
+      noteModal: noteModal
+    }
+
+    data = {
+      notebook_id: '',
+      modalHidden: true,
+      tabBar: {
+        "selectedColor": "#32b36e",
+        "list": [
+          {
+            "pagePath": "../pages/note_list",
+            "text": "所有",
+            "iconPath": "/assets/images/note.png",
+            "selectedIconPath": "/assets/images/note_select.png",
+            "selectedColor": "#32b36e",
+            "pageTum": "redirect",
+            "active": true
+          }, 
+          {
+            "pagePath": "../pages/note_add",
+            "text": "新增",
+            "iconPath": "/assets/images/add.png",
+            "selectedIconPath": "/assets/images/add_select.png",
+            "selectedColor": "#32b36e",
+            "pageTum": "navigate",
+            "active": false
+          }, 
+          {
+            "pagePath": "../pages/notebook",
+            "text": "笔记本",
+            "iconPath": "/assets/images/doc.png",
+            "selectedIconPath": "/assets/images/doc_select.png",
+            "selectedColor": "#32b36e",
+            "pageTum": "redirect",
+            "active": false
+          },
+          {
+            "pagePath": "../pages/note_my",
+            "text": "我的",
+            "iconPath": "/assets/images/my.png",
+            "selectedIconPath": "/assets/images/my_select.png",
+            "selectedColor": "#32b36e",
+            "pageTum": "redirect",
+            "active": false
+          }
+        ]
+      }
+    }
+
+    events = {
+
+    }
+
+    computed = {
+
+    }
+
+    methods = {
+      onTapMoveHere () {
+        var self = this;
+        _g.ajax('post', '/note/move_note',{noteId: self.$parent.globalData.moveNoteId, notebook_id: self.notebook_id},function(res){
+          if (res.data.success) {
+            _g.toast(res.data.message);
+          }
+        },function(err){
+          console.log('err');
+          console.log(err);
+        });
+      }
+
+    }
+
+    onShow () {
+      var self = this;
+
+    }
+
+    onLoad(option) {
+      console.log('load')
+      console.log(option)
+
+      this.modalHidden = option.isMoveNote === false;
+      this.notebook_id = option.notebook_id;
+    }
+  }
+</script>

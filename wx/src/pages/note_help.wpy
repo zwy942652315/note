@@ -1,0 +1,90 @@
+<style lang="less">
+  .ui-help__box{
+    width: 100%;
+    height: 100%;
+  }
+</style>
+<template>
+  <view class="ui-help__box">
+    <view>这是一款个人使用的笔记</view>
+  </view>
+  <tabBar :tabBar="tabBar"></tabBar>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import tabBar from '@/components/tabBar'
+
+  export default class My extends wepy.page {
+    config = {
+      navigationBarTitleText: '使用指南'
+    }
+    components = {
+      tabBar: tabBar
+    }
+
+    data = {
+      tabBar: {
+        "selectedColor": "#32b36e",
+        "list": [
+          {
+            "pagePath": "../pages/note_list",
+            "text": "所有",
+            "iconPath": "/assets/images/note.png",
+            "selectedIconPath": "/assets/images/note_select.png",
+            "selectedColor": "#32b36e",
+            "pageTum": "redirect",
+            "active": false
+          }, 
+          {
+            "pagePath": "../pages/note_add",
+            "text": "新增",
+            "iconPath": "/assets/images/add.png",
+            "selectedIconPath": "/assets/images/add_select.png",
+            "selectedColor": "#32b36e",
+            "pageTum": "navigate",
+            "active": false
+          }, 
+          {
+            "pagePath": "../pages/notebook",
+            "text": "笔记本",
+            "iconPath": "/assets/images/doc.png",
+            "selectedIconPath": "/assets/images/doc_select.png",
+            "selectedColor": "#32b36e",
+            "pageTum": "redirect",
+            "active": false
+          },
+          {
+            "pagePath": "../pages/note_my",
+            "text": "我的",
+            "iconPath": "/assets/images/my.png",
+            "selectedIconPath": "/assets/images/my_select.png",
+            "selectedColor": "#32b36e",
+            "pageTum": "redirect",
+            "active": true
+          }
+        ]
+      }
+    }
+
+    events = {
+
+    }
+
+    computed = {
+
+    }
+
+    methods = {
+
+    }
+
+    onShow () {
+      var self = this;
+    }
+
+    onLoad(option) {
+
+    }
+  }
+</script>

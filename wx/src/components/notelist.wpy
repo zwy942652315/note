@@ -17,15 +17,14 @@
       line-height: 50rpx;
   	}
     .ui-note__itemleft{
-      width: 85%;
+      width: 70%;
       height: 100%;
       display: inline-block;
     }
-    .ui-note__itemright{
+    .ui-note__alignC{
       width: 15%;
       height: 150rpx;
       display: flex;
-      background: red;
       text-align: center;
       justify-content: center;
       align-items: center;
@@ -50,18 +49,24 @@
     .ui-note__time {
       font-size: 12px;
     }
+    .red{
+      background: red;
+    }
 </style>
 <template>
   <view class="ui-note__list">
   	<repeat for="{{list}}" index="index" item="item" key="key">
       <view class="ui-note__line">
     		<view class="ui-note__item clearfix">
-          <view class="ui-note__itemleft fl" @tap="tap" data-id="{{item._id}}">
+          <view class="ui-note__itemleft fl" @tap="tap" @longpress="longpressNote" data-id="{{item._id}}">
             <view class="ui-note__title">{{item.title}}</view>
             <view class="ui-note__content">{{item.content}}</view>
             <view class="ui-note__time">{{item.createtime}}</view>
           </view>
-          <view class="ui-note__itemright fr" @tap="deleteNote" data-id="{{item._id}}">
+          <view class="ui-note__itemmin ui-note__alignC fl" @tap="onTapCollect" data-id="{{item._id}}" data-isCollect="{{item.isCollect}}">
+            <image src="{{item.isCollect?'../assets/images/hascollect.png' : '../assets/images/collect.png'}}"></image>
+          </view>
+          <view class="ui-note__itemright ui-note__alignC red fr" @tap="deleteNote" data-id="{{item._id}}">
             <image src="../assets/images/delete.png"></image>
           </view>
     		</view>
@@ -73,14 +78,23 @@
   import wepy from 'wepy'
 
   export default class Notelist extends wepy.component {
+
     props = {
       list: {
       	type: Object,
       	default: []
+      },
+      item: {
+        type: Object
       }
     }
 
     methods = {
+      longpressNote (e) {
+        console.log('长嗯')
+        console.log(e);
+        this.$emit('longpressNote', e.currentTarget.dataset.id)
+      },
       tap (e) {
         console.log('点击')
         console.log(e)
@@ -89,6 +103,18 @@
       },
       deleteNote (e) {
         this.$emit('deleteNote', e.currentTarget.dataset.id)
+      },
+      onTapCollect (e) {
+        var id = e.currentTarget.dataset.id;
+        var isCollect = false;
+        this.list.find((item) => {
+          if (item._id == id) {
+            console.log(item)
+            item.isCollect = !item.isCollect
+            isCollect = item.isCollect;
+          }
+        })
+        this.$emit('onTapCollect', id, isCollect)
       }
     }
   }
