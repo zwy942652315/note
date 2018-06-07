@@ -116,6 +116,11 @@
         _g.ajax('post', '/note/move_note',{noteId: self.$parent.globalData.moveNoteId, notebook_id: self.notebook_id},function(res){
           if (res.data.success) {
             _g.toast(res.data.message);
+            self.modalHidden = true; 
+            self.$apply();
+            wx.navigateTo({
+              url: 'note_list'
+            })
           }
         },function(err){
           console.log('err');

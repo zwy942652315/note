@@ -181,7 +181,7 @@
       getNoteBookList (id) {
         this.$parent.globalData.notebook_id = id;
         wx.navigateTo({
-          url: 'note_move_here?notebook_id='id
+          url: 'note_move_here?notebook_id=' + id
         })
       },
       deleteNoteBook (id) {
