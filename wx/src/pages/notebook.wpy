@@ -84,6 +84,7 @@
       notebookId: '',
       bookname: '',
       modalHidden: true,
+      moveNoteId: '',
       tabBar: {
         "selectedColor": "#32b36e",
         "list": [
@@ -180,9 +181,16 @@
       },
       getNoteBookList (id) {
         this.$parent.globalData.notebook_id = id;
-        wx.navigateTo({
-          url: 'note_list?id=' + id
-        })
+        console.log(this.moveNoteId)
+        if (this.moveNoteId) {
+          wx.navigateTo({
+            url: 'note_move_here?notebook_id=' + id + '&moveNoteId=' + this.moveNoteId
+          })
+        } else {
+          wx.navigateTo({
+            url: 'note_list?id=' + id
+          })
+        }
       },
       deleteNoteBook (id) {
         var self = this;
@@ -276,6 +284,8 @@
     }
 
     onLoad(option) {
+      console.log(option)
+      this.moveNoteId = option.moveNoteId ? option.moveNoteId : '';
       this.getList(1);
       wx.getSystemInfo({
         success: (res) => {

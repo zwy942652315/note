@@ -242,9 +242,8 @@
       },
       onTapMoveNote () {
         this.modalHidden = true;
-        this.$parent.globalData.moveNoteId = this.moveNoteId;
         wx.navigateTo({
-          url: 'note_move'
+          url: 'notebook?moveNoteId=' + this.moveNoteId
         });
       },
       onCancelMove () {
